@@ -3,6 +3,7 @@
 /[Oo]bj/
 /[Bb]uild/
 /[Bb]uilds/
+/Assets/[Bb]uilds/
 /Assets/AssetStoreTools*
 
 # Visual Studio 2015 cache directory
@@ -33,3 +34,4 @@ sysinfo.txt
 *.apk
 *.unitypackage
 TeensiestHeroes/Library/
+TeensiestHeroes/Temp/
