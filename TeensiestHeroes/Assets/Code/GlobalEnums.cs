@@ -22,3 +22,64 @@ public enum ChangeEvent_SceneType
 
     DEFAULT = 0xF
 }
+
+public enum HitboxType
+{
+    BOX = 0x0,
+    CIRCLE = 0x1,
+    CONE = 0x2
+}
+
+public enum DamageType
+{
+    Physical,
+    Magical,
+    True
+}
+
+public enum ScreenEffectType
+{
+    POISON,
+    BLIND,
+    LIGHT_BLIND,
+    BLEED,
+    STAGGER,
+    CONFUSE,
+    SLOW
+}
+
+public enum WeaponType
+{
+    #region Physical
+
+    //Melee
+    Sword,
+    Dagger,
+    Shield,
+    Axe,
+    Spear,
+    Blunt,
+
+    //Ranged
+    Crossbow,
+    Thrown,
+    Whip,
+
+    #endregion
+
+    #region Magical
+
+    //Melee
+    Tome,
+    Focus,
+    Talisman,
+    Runes,
+
+    //Ranged
+    Wand,
+    Lantern,
+    Orb,
+    Tarot
+
+    #endregion
+}
