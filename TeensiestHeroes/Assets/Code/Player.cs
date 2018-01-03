@@ -110,8 +110,8 @@ public class Player : PlayerBehavior
         }
         else
         {
-            transform.position = Vector3.Lerp(transform.position, networkObject.m_Position, BaseMoveSpeed * 2.5f * Time.deltaTime);
-            transform.rotation = Quaternion.Slerp(transform.rotation, networkObject.m_Rotation, BaseMoveSpeed * 8f * Time.deltaTime);
+            transform.position = networkObject.m_Position;
+            transform.rotation = networkObject.m_Rotation;
         }
     }
 
