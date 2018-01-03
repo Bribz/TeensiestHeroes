@@ -3,7 +3,7 @@
 //  Player.cs
 //
 //  Author   :   PineCone
-//  Date     :   12/7/2017
+//  Date     :   1/1/2018
 //
 // ==================================
 
@@ -18,8 +18,9 @@ public class Player : PlayerBehavior
     private const float MoveSpeedMultiplier = 50f;
     private const float BaseMoveSpeed = 5f;
     private const float MaxStepOffset = .75f;
-    
 
+    private VelocityHandler m_VelHandler;
+    private AttackHandler p_AttackHandler;
     private Rigidbody m_RigidBody;
     private Quaternion m_RotateTo;
     private Vector3 m_InputDirection;
@@ -31,8 +32,8 @@ public class Player : PlayerBehavior
     /// <summary>
     /// All ForgeNetworking Classes Use this instead of Start() or Awake().
     /// </summary>
-    //protected override void NetworkStart()
-    private void Start()
+    protected override void NetworkStart()
+    //private void Start()
     {
         //
         base.NetworkStart();
@@ -41,8 +42,15 @@ public class Player : PlayerBehavior
         m_InputDirection = Vector3.zero;
         m_PreVelocity = Vector3.zero;
         m_RigidBody = GetComponent<Rigidbody>();
-        m_CamController = Camera.main.gameObject.GetComponent<CameraController>();
-        m_CamController.SetFollowTarget(transform);
+
+        if(networkObject.IsOwner)
+        {
+            m_CamController = Camera.main.gameObject.GetComponent<CameraController>();
+            m_CamController.SetFollowTarget(transform);
+        }
+        
+        p_AttackHandler = GetComponent<AttackHandler>();
+        m_VelHandler = new VelocityHandler();
         initialized = true;
     }
 
@@ -88,8 +96,8 @@ public class Player : PlayerBehavior
             //  transform.position += (Vector3.up * (pointHeight.y - transform.position.y));
             //}
             #endregion
-            m_PreVelocity = m_InputDirection * BaseMoveSpeed * Time.deltaTime;
-            transform.position += m_PreVelocity;
+            
+            transform.position += CalculateVelocity();
             networkObject.m_Position = transform.position;
             
             if (m_InputDirection != Vector3.zero)
@@ -102,9 +110,73 @@ public class Player : PlayerBehavior
         }
         else
         {
-            transform.position = networkObject.m_Position;
+            transform.position = Vector3.Lerp(transform.position, networkObject.m_Position, BaseMoveSpeed * 2.5f * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, networkObject.m_Rotation, BaseMoveSpeed * 8f * Time.deltaTime);
         }
     }
+
+   
+    
+    private Vector3  CalculateVelocity()
+    {
+        Vector3 retVal;
+        int numVelocities = 0;
+        //Calculate Input Velocity;
+        if (!p_AttackHandler.currentlyActing)
+        {
+            m_PreVelocity = m_InputDirection * BaseMoveSpeed * Time.deltaTime;
+            numVelocities++;
+        }
+        else
+        {
+            m_PreVelocity = Vector3.zero;
+        }
+        retVal = m_PreVelocity;
+
+        //Get Values from VelocityHandler. Assume all velocities are getting read.
+        //TODO: Allow some velocities to get "cached". For now, grabbing all velocities to read.
+        List<VelocityObj> vObjs = m_VelHandler.GetAsList();
+        foreach(var vObj in vObjs)
+        {
+            retVal += (vObj.Velocity * Time.deltaTime);
+            numVelocities++;
+        }
+
+        if(numVelocities != 0)
+        {
+            retVal /= numVelocities;
+        }
+        
+
+        return retVal;
+    }
+
+    #region VelocityHandler Functionality
+    public int AddVelocity(Vector3 input)
+    {
+        return m_VelHandler.Add(input);
+    }
+
+    public void SetVelocity(VelocityObj vObj)
+    {
+        m_VelHandler.Set(vObj.ID, vObj.Velocity);
+    }
+
+    public void SetVelocity(int ID, Vector3 input)
+    {
+        m_VelHandler.Set(ID, input);
+    }
+
+    public bool RemoveVelocity(int ID)
+    {
+        return m_VelHandler.Remove(ID);
+    }
+
+    public VelocityObj PopVelocity(int ID)
+    {
+        return m_VelHandler.Pop(ID);
+    }
+    #endregion
 
     #region Deprecated
     /*

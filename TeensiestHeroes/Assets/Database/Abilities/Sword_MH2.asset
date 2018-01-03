@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Name: Sword_MH2
   m_EditorClassIdentifier: 
   Ability_Particles: []
-  Ability_Icon: {fileID: 2800000, guid: 3aac3087967ea4fae858ec0494fd24d9, type: 3}
+  Ability_Icon: {fileID: 2800000, guid: 3faec316203977241a2cd1b0cebbeba2, type: 3}
   Ability_Name: Lunge
   Ability_Cooldown: 6.5
   Ability_Combo_Next: {fileID: 0}
-  StartUpTime: 0
+  Hitbox_StartUpTime: 0
+  PlayerEffect_StartUpTime: 0

@@ -13,9 +13,9 @@ public class MultiplayerMenu : MonoBehaviour
 	public InputField portNumber = null;
 	public bool DontChangeSceneOnConnect = false;
 	public string masterServerHost = string.Empty;
-	public ushort masterServerPort = 15940;
+	public ushort masterServerPort = 7735;
 	public string natServerHost = string.Empty;
-	public ushort natServerPort = 15941;
+	public ushort natServerPort = 7735;
 	public bool connectUsingMatchmaking = false;
 	public bool useElo = false;
 	public int myElo = 0;
@@ -37,7 +37,7 @@ public class MultiplayerMenu : MonoBehaviour
 	private void Start()
 	{
 		ipAddress.text = "127.0.0.1";
-		portNumber.text = "15937";
+		portNumber.text = "7735";
 
 		for (int i = 0; i < ToggledButtons.Length; ++i)
 		{

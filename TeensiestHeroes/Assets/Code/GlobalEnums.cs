@@ -48,6 +48,26 @@ public enum ScreenEffectType
     SLOW
 }
 
+public enum DashType
+{
+    Light,
+    Medium,
+    Heavy,
+    None
+}
+
+public enum AbilityType
+{
+    MainHand_Primary        = 0x0,
+    MainHand_Secondary      = 0x1,
+    OffHand                 = 0x2,
+    Class                   = 0x3, 
+    Tool                    = 0x4,
+    Dash                    = 0x5,
+    None                    = 0xE,
+    All                     = 0xF
+}
+
 public enum WeaponType
 {
     #region Physical

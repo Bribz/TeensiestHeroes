@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Name: Sword_MH1
   m_EditorClassIdentifier: 
   Ability_Particles: []
-  Ability_Icon: {fileID: 2800000, guid: 3aac3087967ea4fae858ec0494fd24d9, type: 3}
+  Ability_Icon: {fileID: 2800000, guid: 7b5ca16e682616a4c94e18962f278691, type: 3}
   Ability_Name: Swipe
   Ability_Cooldown: 0.6
   Ability_Combo_Next: {fileID: 0}
-  StartUpTime: 0
+  Hitbox_StartUpTime: 0
+  PlayerEffect_StartUpTime: 0

@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
 
     public TH_SceneManager SceneManager;
     public TH_UIManager UIManager;
+
+    public TH_PlayerManager PlayerManager;
     #endregion
 
     #region Singleton_Management
@@ -57,9 +59,16 @@ public class GameManager : MonoBehaviour
             UIManager = gameObject.AddComponent<TH_UIManager>();
         }
 
+        PlayerManager = GetComponent<TH_PlayerManager>();
+        if(!PlayerManager)
+        {
+            PlayerManager = gameObject.AddComponent<TH_PlayerManager>();
+        }
+
         //Initialize Order
         instance.SceneManager.Initialize();
         instance.UIManager.Initialize();
+        instance.PlayerManager.Initialize();
 
         instance.SceneManager.LoadScene(1, false, false);
         

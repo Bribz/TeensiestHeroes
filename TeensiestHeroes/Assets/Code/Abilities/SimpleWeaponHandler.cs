@@ -3,31 +3,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SimpleWeaponHandler : MonoBehaviour
+public class SimpleWeaponHandler : MonoBehaviour, IHandler
 {
     private SimpleWeaponAbility Current_Ability;
-    
-    internal void Initialize(SimpleWeaponAbility abilityData)
+
+    /// <summary>
+    /// Do not use. Implementation of interface. Use overloaded Initialize method instead
+    /// </summary>
+    public void Initialize() { Log.Error("Using wrong method for Initialization!", 33); }
+
+    public void Initialize(SimpleWeaponAbility abilityData)
     {
         Current_Ability = abilityData;
     }
 
-    internal void Cleanup()
+    public void Activate()
     {
         
     }
 
-    internal void Cancel()
+    public void Callback()
     {
         
     }
 
-    internal void Callback()
+    public void Cancel()
     {
         
     }
 
-    internal void Activate()
+    public void Cleanup()
     {
         
     }

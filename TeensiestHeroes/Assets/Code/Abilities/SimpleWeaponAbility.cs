@@ -16,7 +16,10 @@ public class SimpleWeaponAbility : WeaponAbility
     public override void Activate()
     {
         Log.Msg(string.Format("Player used skill[{0}]", Ability_Name));
-        handler.Activate();
+        if(handler)
+        {
+            handler.Activate();
+        }
     }
 
     public override void Callback()

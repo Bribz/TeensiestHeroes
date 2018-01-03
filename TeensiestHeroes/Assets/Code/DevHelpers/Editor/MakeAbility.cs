@@ -26,4 +26,15 @@ public class MakeAbility
         EditorUtility.FocusProjectWindow();
         Selection.activeObject = asset;
     }
+
+    [MenuItem("Design/Create/Abilities/Dash")]
+    public static void CreateDashAbility()
+    {
+        DashAbility asset = ScriptableObject.CreateInstance<DashAbility>();
+        AssetDatabase.CreateAsset(asset, "Assets/Database/Dashes/NewDashAbility.asset");
+        AssetDatabase.SaveAssets();
+
+        EditorUtility.FocusProjectWindow();
+        Selection.activeObject = asset;
+    }
 }
