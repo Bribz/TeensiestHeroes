@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 53f2210d0fb026343bbf0a3faa5b2ea9
-timeCreated: 1512954538
+timeCreated: 1515040133
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -202,7 +202,7 @@ ModelImporter:
   humanDescription:
     serializedVersion: 2
     human:
-    - boneName: Bones
+    - boneName: BaseBone
       humanName: Hips
       limit:
         min: {x: 0, y: 0, z: 0}
@@ -258,16 +258,8 @@ ModelImporter:
         value: {x: 0, y: 0, z: 0}
         length: 0
         modified: 0
-    - boneName: BaseBone
+    - boneName: SpineBone
       humanName: Spine
-      limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 0
-    - boneName: HeadBone
-      humanName: Chest
       limit:
         min: {x: 0, y: 0, z: 0}
         max: {x: 0, y: 0, z: 0}
@@ -354,22 +346,6 @@ ModelImporter:
         value: {x: 0, y: 0, z: 0}
         length: 0
         modified: 0
-    - boneName: HatBone
-      humanName: RightEye
-      limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 0
-    - boneName: SpineBone
-      humanName: UpperChest
-      limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 0
     skeleton:
     - name: TestCharacter(Clone)
       parentName: 
@@ -396,49 +372,29 @@ ModelImporter:
       position: {x: 2.1684043e-21, y: 0.0011578742, z: 4.638423e-13}
       rotation: {x: 0.0040141637, y: 0.99998623, z: 0.0033836702, w: -0.0000036590795}
       scale: {x: 0.99999994, y: 1.0000002, z: 1}
-    - name: RightShoulderBone
+    - name: LeftHipBone
       parentName: SpineBone
       position: {x: 6.1235097e-12, y: 0.0017094279, z: 7.194149e-12}
-      rotation: {x: 0.6776484, y: 0.53978044, z: 0.38343683, w: -0.3200093}
-      scale: {x: 0.9999999, y: 0.99999994, z: 0.9999999}
-    - name: RightUpperArmBone
-      parentName: RightShoulderBone
-      position: {x: 2.537854e-10, y: 0.0022499373, z: 6.170012e-10}
-      rotation: {x: 0.078810014, y: 0.25717378, z: -0.047118172, w: 0.96199304}
-      scale: {x: 0.99999994, y: 0.99999976, z: 0.99999994}
-    - name: RightLowerArmBone
-      parentName: RightUpperArmBone
-      position: {x: -9.3132255e-12, y: 0.00074917293, z: -4.828507e-10}
-      rotation: {x: 0.014377011, y: 0.0006770966, z: 0.0101553565, w: 0.99984485}
-      scale: {x: 1, y: 1.0000001, z: 1}
-    - name: RightHandBone
-      parentName: RightLowerArmBone
-      position: {x: -2.3283064e-12, y: 0.0011874891, z: -5.470156e-10}
-      rotation: {x: -8.673655e-19, y: 0.000000011363795, z: -0.000000011223336, w: 1}
-      scale: {x: 1, y: 0.99999994, z: 1}
-    - name: RightHandBone_end
-      parentName: RightHandBone
-      position: {x: -0, y: 0.0009842246, z: 0}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
+      rotation: {x: 0.9361453, y: -0.23657024, z: -0.25142628, w: -0.066717796}
+      scale: {x: 1.0000007, y: 1.0000001, z: 0.9999999}
+    - name: LeftThighBone
+      parentName: LeftHipBone
+      position: {x: -1.9041863e-10, y: 0.002855234, z: 2.2282165e-10}
+      rotation: {x: -0.20244516, y: -0.48640427, z: -0.11693715, w: 0.8418745}
+      scale: {x: 0.99999994, y: 0.9999999, z: 1}
+    - name: LeftlegBone
+      parentName: LeftThighBone
+      position: {x: 3.410605e-14, y: 0.000924443, z: 1.3083991e-10}
+      rotation: {x: -0.0001365449, y: 0.000056369456, z: 0.000000033870915, w: 1}
+      scale: {x: 1, y: 0.9999999, z: 0.99999994}
+    - name: LeftFootBone
+      parentName: LeftlegBone
+      position: {x: -1.8829381e-15, y: 0.00093984714, z: 2.0980419e-11}
+      rotation: {x: -0.0057953214, y: 0.70708036, z: -0.0057954057, w: 0.7070857}
       scale: {x: 1, y: 1, z: 1}
-    - name: NeckBone
-      parentName: SpineBone
-      position: {x: 6.1235097e-12, y: 0.0017094279, z: 7.194149e-12}
-      rotation: {x: 0.0062607992, y: 0.7070995, z: -0.0014805665, w: 0.7070848}
-      scale: {x: 0.9999999, y: 0.9999999, z: 1}
-    - name: HeadBone
-      parentName: NeckBone
-      position: {x: -1.110223e-14, y: 0.0015623493, z: 1.0465498e-12}
-      rotation: {x: -0.9761726, y: -0.13068944, z: -0.11552866, w: 0.12907566}
-      scale: {x: 1.0000001, y: 1, z: 1}
-    - name: HatBone
-      parentName: HeadBone
-      position: {x: -7.521511e-14, y: 0.0021039587, z: -2.9309886e-16}
-      rotation: {x: 0.0000000044901696, y: 0.0000000017114683, z: -6.984592e-10, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: HatBone_end
-      parentName: HatBone
-      position: {x: -0, y: 0.00066863117, z: 0}
+    - name: LeftFootBone_end
+      parentName: LeftFootBone
+      position: {x: -0, y: 0.0010629626, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: LeftShoulderBone
@@ -464,6 +420,76 @@ ModelImporter:
     - name: LeftHandBone_end
       parentName: LeftHandBone
       position: {x: -0, y: 0.0009093386, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: NeckBone
+      parentName: SpineBone
+      position: {x: 6.1235097e-12, y: 0.0017094279, z: 7.194149e-12}
+      rotation: {x: 0.0062607992, y: 0.7070995, z: -0.0014805665, w: 0.7070848}
+      scale: {x: 0.9999999, y: 0.9999999, z: 1}
+    - name: HeadBone
+      parentName: NeckBone
+      position: {x: -1.110223e-14, y: 0.0015623493, z: 1.0465498e-12}
+      rotation: {x: -0.002235009, y: -0.7293324, z: 0.003303433, w: 0.68414795}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: HatBone
+      parentName: HeadBone
+      position: {x: -7.521511e-14, y: 0.0021039587, z: -2.9309886e-16}
+      rotation: {x: 0.0000000044901696, y: 0.0000000017114683, z: -6.984592e-10, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: HatBone_end
+      parentName: HatBone
+      position: {x: -0, y: 0.00066863117, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: RightHipBone
+      parentName: SpineBone
+      position: {x: 6.1235097e-12, y: 0.0017094279, z: 7.194149e-12}
+      rotation: {x: 0.9394715, y: 0.2303856, z: 0.24555364, w: -0.063397355}
+      scale: {x: 0.99999964, y: 0.99999976, z: 0.99999994}
+    - name: RightThighBone
+      parentName: RightHipBone
+      position: {x: -5.1682034e-11, y: 0.0028237954, z: -6.0231285e-11}
+      rotation: {x: -0.20286722, y: 0.49189276, z: 0.11900865, w: 0.838286}
+      scale: {x: 0.9999998, y: 0.99999994, z: 1}
+    - name: RightLegBone
+      parentName: RightThighBone
+      position: {x: -1.364242e-14, y: 0.0009296792, z: 5.911471e-11}
+      rotation: {x: -0.005707395, y: -0.70712346, z: 0.005706805, w: 0.70704406}
+      scale: {x: 1, y: 0.9999999, z: 1}
+    - name: RightFootBone
+      parentName: RightLegBone
+      position: {x: 2.1936361e-10, y: 0.0009494004, z: -3.5527137e-15}
+      rotation: {x: 0.00067541836, y: 0.71563333, z: -0.00068474916, w: 0.6984756}
+      scale: {x: 1, y: 1, z: 1}
+    - name: RightFootBone_end
+      parentName: RightFootBone
+      position: {x: -0, y: 0.0010451592, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: RightShoulderBone
+      parentName: SpineBone
+      position: {x: 6.1235097e-12, y: 0.0017094279, z: 7.194149e-12}
+      rotation: {x: 0.6776484, y: 0.53978044, z: 0.38343683, w: -0.3200093}
+      scale: {x: 0.9999999, y: 0.99999994, z: 0.9999999}
+    - name: RightUpperArmBone
+      parentName: RightShoulderBone
+      position: {x: 2.537854e-10, y: 0.0022499373, z: 6.170012e-10}
+      rotation: {x: 0.078810014, y: 0.25717378, z: -0.047118172, w: 0.96199304}
+      scale: {x: 0.99999994, y: 0.99999976, z: 0.99999994}
+    - name: RightLowerArmBone
+      parentName: RightUpperArmBone
+      position: {x: -9.3132255e-12, y: 0.00074917293, z: -4.828507e-10}
+      rotation: {x: 0.014377011, y: 0.0006770966, z: 0.0101553565, w: 0.99984485}
+      scale: {x: 1, y: 1.0000001, z: 1}
+    - name: RightHandBone
+      parentName: RightLowerArmBone
+      position: {x: -2.3283064e-12, y: 0.0011874891, z: -5.470156e-10}
+      rotation: {x: -8.673655e-19, y: 0.000000011363795, z: -0.000000011223336, w: 1}
+      scale: {x: 1, y: 0.99999994, z: 1}
+    - name: RightHandBone_end
+      parentName: RightHandBone
+      position: {x: -0, y: 0.0009842246, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: UnusedBackBone
@@ -514,56 +540,6 @@ ModelImporter:
     - name: TailBone3_end
       parentName: TailBone3
       position: {x: -0, y: 0.0012740452, z: 0}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: LeftHipBone
-      parentName: SpineBone
-      position: {x: 6.1235097e-12, y: 0.0017094279, z: 7.194149e-12}
-      rotation: {x: 0.9361453, y: -0.23657024, z: -0.25142628, w: -0.066717796}
-      scale: {x: 1.0000007, y: 1.0000001, z: 0.9999999}
-    - name: LeftThighBone
-      parentName: LeftHipBone
-      position: {x: -1.9041863e-10, y: 0.002855234, z: 2.2282165e-10}
-      rotation: {x: -0.20244516, y: -0.48640427, z: -0.11693715, w: 0.8418745}
-      scale: {x: 0.99999994, y: 0.9999999, z: 1}
-    - name: LeftlegBone
-      parentName: LeftThighBone
-      position: {x: 3.410605e-14, y: 0.000924443, z: 1.3083991e-10}
-      rotation: {x: -0.0001365449, y: 0.000056369456, z: 0.000000033870915, w: 1}
-      scale: {x: 1, y: 0.9999999, z: 0.99999994}
-    - name: LeftFootBone
-      parentName: LeftlegBone
-      position: {x: -1.8829381e-15, y: 0.00093984714, z: 2.0980419e-11}
-      rotation: {x: -0.0057953214, y: 0.70708036, z: -0.0057954057, w: 0.7070857}
-      scale: {x: 1, y: 1, z: 1}
-    - name: LeftFootBone_end
-      parentName: LeftFootBone
-      position: {x: -0, y: 0.0010629626, z: 0}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: RightHipBone
-      parentName: SpineBone
-      position: {x: 6.1235097e-12, y: 0.0017094279, z: 7.194149e-12}
-      rotation: {x: 0.9394715, y: 0.2303856, z: 0.24555364, w: -0.063397355}
-      scale: {x: 0.99999964, y: 0.99999976, z: 0.99999994}
-    - name: RightThighBone
-      parentName: RightHipBone
-      position: {x: -5.1682034e-11, y: 0.0028237954, z: -6.0231285e-11}
-      rotation: {x: -0.20286722, y: 0.49189276, z: 0.11900865, w: 0.838286}
-      scale: {x: 0.9999998, y: 0.99999994, z: 1}
-    - name: RightLegBone
-      parentName: RightThighBone
-      position: {x: -1.364242e-14, y: 0.0009296792, z: 5.911471e-11}
-      rotation: {x: -0.005707395, y: -0.70712346, z: 0.005706805, w: 0.70704406}
-      scale: {x: 1, y: 0.9999999, z: 1}
-    - name: RightFootBone
-      parentName: RightLegBone
-      position: {x: 2.1936361e-10, y: 0.0009494004, z: -3.5527137e-15}
-      rotation: {x: 0.00033282294, y: 0.98535776, z: -0.0007622687, w: 0.17049731}
-      scale: {x: 1, y: 1, z: 1}
-    - name: RightFootBone_end
-      parentName: RightFootBone
-      position: {x: -0, y: 0.0010451592, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Camera
@@ -668,7 +644,8 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 933da0ace31661045a52b6816fb50327,
+    type: 3}
   animationType: 3
   humanoidOversampling: 1
   additionalBone: 0
