@@ -4,10 +4,13 @@ using UnityEngine;
 
 namespace BeardedManStudios.Forge.Networking.Generated
 {
-	[GeneratedRPC("{\"types\":[]")]
-	[GeneratedRPCVariableNames("{\"types\":[]")]
+	[GeneratedRPC("{\"types\":[[\"byte\"][\"byte\"][\"byte[]\"]]")]
+	[GeneratedRPCVariableNames("{\"types\":[[\"ID\"][\"ID\"][\"serialData\"]]")]
 	public abstract partial class PlayerBehavior : NetworkBehavior
 	{
+		public const byte RPC_SEND_ABILITY = 0 + 5;
+		public const byte RPC_SEND_ANIM = 1 + 5;
+		public const byte RPC_SEND_EFFECTS = 2 + 5;
 		
 		public PlayerNetworkObject networkObject = null;
 
@@ -21,6 +24,9 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			networkObject.AttachedBehavior = this;
 
 			base.SetupHelperRpcs(networkObject);
+			networkObject.RegisterRpc("SendAbility", SendAbility, typeof(byte));
+			networkObject.RegisterRpc("SendAnim", SendAnim, typeof(byte));
+			networkObject.RegisterRpc("SendEffects", SendEffects, typeof(byte[]));
 
 			MainThreadManager.Run(() =>
 			{
@@ -95,6 +101,21 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			networkObject.SnapInterpolations();
 		}
 
+		/// <summary>
+		/// Arguments:
+		/// byte ID
+		/// </summary>
+		public abstract void SendAbility(RpcArgs args);
+		/// <summary>
+		/// Arguments:
+		/// byte ID
+		/// </summary>
+		public abstract void SendAnim(RpcArgs args);
+		/// <summary>
+		/// Arguments:
+		/// byte[] serialData
+		/// </summary>
+		public abstract void SendEffects(RpcArgs args);
 
 		// DO NOT TOUCH, THIS GETS GENERATED PLEASE EXTEND THIS CLASS IF YOU WISH TO HAVE CUSTOM CODE ADDITIONS
 	}

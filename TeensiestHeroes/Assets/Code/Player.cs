@@ -11,6 +11,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using BeardedManStudios.Forge.Networking.Generated;
+using BeardedManStudios.Forge.Networking;
+using System;
 
 public class Player : PlayerBehavior
 {
@@ -176,6 +178,52 @@ public class Player : PlayerBehavior
     {
         return m_VelHandler.Pop(ID);
     }
+
+    #endregion
+    
+    #region RPCs
+    /// <summary>
+    /// Send Ability ID. ID is relative to which ability is sent.
+    /// </summary>
+    /// <param name="args">(RPCArgs) <Byte> ID</param>
+    public override void SendAbility(RpcArgs args)
+    {
+        //TODO: Handle Server Code
+
+        if(!GameManager.instance.PlayerManager.IsClient(networkObject.MyPlayerId))
+        {
+            p_AttackHandler.RPCAbility(args.GetNext<byte>());
+        }
+    }
+
+    /// <summary>
+    /// Send Animation ID. ID is relative to Animation to play
+    /// </summary>
+    /// <param name="args">(RPCArgs) <Byte> ID</param>
+    public override void SendAnim(RpcArgs args)
+    {
+        //TODO: Handle Server Code
+
+        if (!GameManager.instance.PlayerManager.IsClient(networkObject.MyPlayerId))
+        {
+            //TODO: Handle animation playing
+        }
+    }
+
+    /// <summary>
+    /// Send Ability ID. ID is relative to which ability is sent.
+    /// </summary>
+    /// <param name="args">(RPCArgs) <Byte[]> SerializedEffect </param>
+    public override void SendEffects(RpcArgs args)
+    {
+        //TODO: Handle Server Code
+
+        if (!GameManager.instance.PlayerManager.IsClient(networkObject.MyPlayerId))
+        {
+            //TODO: Handle Effect Management
+        }
+    }
+
     #endregion
 
     #region Deprecated

@@ -1,14 +1,19 @@
-﻿using System.Collections;
+﻿using BeardedManStudios.Forge.Networking;
+using BeardedManStudios.Forge.Networking.Generated;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class AttackHandler : MonoBehaviour
 {
+    private NetworkObject p_networkObject;
     [Header("Main Hand")]
     public IAbility MainHand_1;
     public IAbility MainHand_2;
     [Header("Offhand")]
     public IAbility OffHand_1;
+    [Header("Class")]
     public IAbility Class;
     [Header("Tool")]
     public IAbility Tool;
@@ -167,6 +172,69 @@ public class AttackHandler : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// Called by server. Issues ability on Client.
+    /// </summary>
+    /// <param name="ID">Ability ID</param>
+    internal void RPCAbility(byte ID)
+    {
+        switch (ID)
+        {
+            //Mainhand 1
+            case 0x00:
+                {
+                    if(MainHand_1 != null)
+                    {
+                        MainHand_1.Activate();
+                    }
+                    break;
+                }
+            //Mainhand 2
+            case 0x01:
+                {
+                    if(MainHand_2 != null)
+                    {
+                        MainHand_2.Activate();
+                    }
+                    break;
+                }
+            //Offhand
+            case 0x02:
+                {
+                    if(OffHand_1 != null)
+                    {
+                        OffHand_1.Activate();
+                    }
+                    break;
+                }
+            //Class
+            case 0x03:
+                {
+                    if(Class != null)
+                    {
+                        Class.Activate();
+                    }
+                    break;
+                }
+            //Tool
+            case 0x04:
+                {
+                    if(Tool != null)
+                    {
+                        Tool.Activate();
+                    }
+                    break;
+                }
+            //Dash
+            case 0x05:
+                {
+                    //Dont Positionally move character for dashes. 
+                    //Just play animation and invincibility
+                    break;
+                }
+        }
+    }
+
     public void Update()
     {
         #region Cooldowns
@@ -194,6 +262,7 @@ public class AttackHandler : MonoBehaviour
                     {
                         SetCooldown(AbilityType.MainHand_Primary);
                         MainHand_1.Activate();
+                        p_networkObject.SendRpc(Player.RPC_SEND_ABILITY, Receivers.All, (byte)0x0);
                     }
                 }
                 else
@@ -213,6 +282,7 @@ public class AttackHandler : MonoBehaviour
                     {
                         SetCooldown(AbilityType.MainHand_Secondary);
                         MainHand_2.Activate();
+                        p_networkObject.SendRpc(Player.RPC_SEND_ABILITY, Receivers.All, (byte)0x1);
                     }
                 }
                 else
@@ -232,6 +302,7 @@ public class AttackHandler : MonoBehaviour
                     {
                         SetCooldown(AbilityType.OffHand);
                         OffHand_1.Activate();
+                        p_networkObject.SendRpc(Player.RPC_SEND_ABILITY, Receivers.All, (byte)0x2);
                     }
                 }
                 else
@@ -251,6 +322,7 @@ public class AttackHandler : MonoBehaviour
                     {
                         SetCooldown(AbilityType.Class);
                         Class.Activate();
+                        p_networkObject.SendRpc(Player.RPC_SEND_ABILITY, Receivers.All, (byte)0x3);
                     }
                 }
                 else
@@ -270,6 +342,7 @@ public class AttackHandler : MonoBehaviour
                     {
                         SetCooldown(AbilityType.Dash);
                         Dash.Activate();
+                        p_networkObject.SendRpc(Player.RPC_SEND_ABILITY, Receivers.All, (byte)0x5);
                     }
                 }
                 else
@@ -290,6 +363,7 @@ public class AttackHandler : MonoBehaviour
                     {
                         SetCooldown(AbilityType.Tool);
                         Tool.Activate();
+                        p_networkObject.SendRpc(Player.RPC_SEND_ABILITY, Receivers.All, (byte)0x4);
                     }
                 }
                 else
