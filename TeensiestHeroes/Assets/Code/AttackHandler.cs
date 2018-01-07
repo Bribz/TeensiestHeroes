@@ -37,6 +37,11 @@ public class AttackHandler : MonoBehaviour
         Cooldowns = new float[6];
     }
 
+    internal void SetNetworkObject(NetworkObject netObj)
+    {
+        p_networkObject = netObj;
+    }
+
     public void Initialize(WeaponObject Primary = null, WeaponObject Secondary = null)
     {
         if(Primary != null)

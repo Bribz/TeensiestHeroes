@@ -120,7 +120,7 @@ public class DashHandler : MonoBehaviour, IHandler
             {
                 if(m_DashAbility.PlayerEffect != null)
                 {
-                    m_DashAbility.PlayerEffect.IsInvincible = true;
+                    //m_DashAbility.PlayerEffect.IsInvincible = true;
                 }
                     
 
@@ -128,7 +128,7 @@ public class DashHandler : MonoBehaviour, IHandler
             }
             else
             {
-                m_DashAbility.PlayerEffect.IsInvincible = false;
+                //m_DashAbility.PlayerEffect.IsInvincible = false;
             }
             
             yield return null;

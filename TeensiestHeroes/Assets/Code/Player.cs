@@ -52,6 +52,7 @@ public class Player : PlayerBehavior
         }
         
         p_AttackHandler = GetComponent<AttackHandler>();
+        p_AttackHandler.SetNetworkObject(networkObject);
         m_VelHandler = new VelocityHandler();
         initialized = true;
     }
@@ -189,11 +190,14 @@ public class Player : PlayerBehavior
     public override void SendAbility(RpcArgs args)
     {
         //TODO: Handle Server Code
-
+    #if !SERVER
         if(!GameManager.instance.PlayerManager.IsClient(networkObject.MyPlayerId))
         {
             p_AttackHandler.RPCAbility(args.GetNext<byte>());
         }
+    #else
+        networkObject.SendRpc(RPC_SEND_ABILITY, Receivers.OthersProximity, args.GetNext<byte>());
+    #endif
     }
 
     /// <summary>
@@ -203,12 +207,16 @@ public class Player : PlayerBehavior
     public override void SendAnim(RpcArgs args)
     {
         //TODO: Handle Server Code
-
+    #if !SERVER
         if (!GameManager.instance.PlayerManager.IsClient(networkObject.MyPlayerId))
         {
             //TODO: Handle animation playing
         }
+    #else
+            networkObject.SendRpc(RPC_SEND_ANIM, Receivers.OthersProximity, args.GetNext<byte>());
+    #endif
     }
+
 
     /// <summary>
     /// Send Ability ID. ID is relative to which ability is sent.
@@ -218,15 +226,19 @@ public class Player : PlayerBehavior
     {
         //TODO: Handle Server Code
 
+    #if !SERVER
         if (!GameManager.instance.PlayerManager.IsClient(networkObject.MyPlayerId))
         {
-            //TODO: Handle Effect Management
+            //TODO: Handle animation playing
         }
+    #else
+            networkObject.SendRpc(RPC_SEND_EFFECTS, Receivers.OthersProximity, args.GetNext<byte[]>());
+    #endif
     }
 
-    #endregion
+#endregion
 
-    #region Deprecated
+#region Deprecated
     /*
     private bool CheckForwardRay(Vector3 Direction)
     {
@@ -234,9 +246,9 @@ public class Player : PlayerBehavior
 
         bool retval = Physics.Raycast(forwardCollisionRay, .71f, LayerMask.NameToLayer("TERRAIN"));
 
-        #if DEBUG_VERBOSE
+#if DEBUG_VERBOSE
             Debug.DrawLine(forwardCollisionRay.origin, transform.position + (forwardCollisionRay.direction * .71f), retval? Color.red : Color.green);
-        #endif
+#endif
 
         return retval;
     }
@@ -258,12 +270,12 @@ public class Player : PlayerBehavior
         RaycastHit grabRayInfo = new RaycastHit();
         bool retval = Physics.Raycast(forwardGrabRay, out grabRayInfo, MaxStepOffset, LayerMask.NameToLayer("TERRAIN"));
 
-        #if DEBUG_VERBOSE
+#if DEBUG_VERBOSE
             Debug.DrawLine(forwardGrabRay.origin, transform.position + forwardGrabRay.direction, retval ? Color.red : Color.green);
-        #endif
+#endif
 
         return grabRayInfo.point;
     }
     */
-    #endregion
+#endregion
 }

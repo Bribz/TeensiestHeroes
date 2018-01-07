@@ -11,7 +11,7 @@ using System.Linq;
 public static class AssignScriptDefines {
 
     #region Predefined_Define_Arrays
-    private static readonly string[] DEBUG_DEFINES = 
+    private static readonly string[] DEBUG_DEFINES =
         {
         "DEBUG_VERBOSE"
         };
@@ -21,6 +21,10 @@ public static class AssignScriptDefines {
         };
     private static readonly string[] BUILD_DEFINES =
         {
+        };
+    private static readonly string[] SERVER_BUILD_DEFINES =
+        {
+        "SERVER"
         };
 
     #endregion
@@ -47,6 +51,12 @@ public static class AssignScriptDefines {
         AssignScriptDefine(BUILD_DEFINES);
         Debug.Log("[EDITOR] : Scripting Defines Set to <BUILD>");
     }
+    [MenuItem("Helper/SERVER_BUILD", false, 101)]
+    public static void AssignServerBuild()
+    {
+        AssignScriptDefine(BUILD_DEFINES);
+        Debug.Log("[EDITOR] : Scripting Defines Set to <SERVER_BUILD>");
+    }
 
     /// <summary>
     /// The magic. Remove Scripting Defines
@@ -60,7 +70,5 @@ public static class AssignScriptDefines {
         PlayerSettings.SetScriptingDefineSymbolsForGroup(
             EditorUserBuildSettings.selectedBuildTargetGroup,
             string.Join(";", allDefines.ToArray()));
-
-        
     }
 }
