@@ -2,9 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Rewired;
 
 public class DashAbility : IAbility
 {
+    private Rewired.Player m_RWPlayer;
     private Transform PlayerBase;
     public PlayerEffect PlayerEffect;
     private DashHandler handler;
@@ -15,7 +17,7 @@ public class DashAbility : IAbility
 
     public override void Activate()
     {
-        handler.Activate(new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")), DashSpeedModifier, DashDistanceModifier);
+        handler.Activate(new Vector3(m_RWPlayer.GetAxis("Axis_H"), 0, m_RWPlayer.GetAxis("Axis_V")), DashSpeedModifier, DashDistanceModifier);
     }
 
     public override void Callback()
@@ -46,6 +48,8 @@ public class DashAbility : IAbility
 
     public void Initialize(AttackHandler atkHandler, DashType dType)
     {
+        m_RWPlayer = ReInput.players.GetPlayer(0);
+
         handler = atkHandler.GetComponent<DashHandler>();
         if (!handler)
         {
