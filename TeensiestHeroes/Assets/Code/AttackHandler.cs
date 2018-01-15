@@ -4,9 +4,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Rewired;
 
 public class AttackHandler : MonoBehaviour
 {
+    private Rewired.Player m_RWPlayer;
     private NetworkObject p_networkObject;
     [Header("Main Hand")]
     public IAbility MainHand_1;
@@ -35,6 +37,7 @@ public class AttackHandler : MonoBehaviour
     private void Awake()
     {
         Cooldowns = new float[6];
+        m_RWPlayer = ReInput.players.GetPlayer(0);
     }
 
     internal void SetNetworkObject(NetworkObject netObj)
@@ -257,7 +260,7 @@ public class AttackHandler : MonoBehaviour
         #endregion
 
         #region Inputs
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (m_RWPlayer.GetButtonDown("MainHand_1"))
         {
             if (!currentlyActing)
             {
@@ -277,7 +280,7 @@ public class AttackHandler : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        if (m_RWPlayer.GetButtonDown("MainHand_2"))
         {
             if(!currentlyActing)
             {
@@ -297,7 +300,7 @@ public class AttackHandler : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha3))
+        if (m_RWPlayer.GetButtonDown("OffHand_1"))
         {
             if(!currentlyActing)
             {
@@ -317,7 +320,7 @@ public class AttackHandler : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha4))
+        if (m_RWPlayer.GetButtonDown("Class"))
         {
             if(!currentlyActing)
             {
@@ -337,7 +340,7 @@ public class AttackHandler : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftControl))
+        if (m_RWPlayer.GetButtonDown("Dodge"))
         {
             if(!currentlyActing)
             {
@@ -358,7 +361,7 @@ public class AttackHandler : MonoBehaviour
             
         }
 
-        if(Input.GetKeyDown(KeyCode.T))
+        if(m_RWPlayer.GetButtonDown("Tool"))
         {
             if(!currentlyActing)
             {

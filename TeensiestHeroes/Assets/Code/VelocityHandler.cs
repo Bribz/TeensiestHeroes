@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+[System.Serializable]
 public class VelocityHandler
 {
+    
     private Dictionary<int, VelocityObj> Velocities;
     private int CurrentKeyValue;
     public int currentCount { get; private set; }

@@ -888,7 +888,7 @@ GameObject:
   - component: {fileID: 114347397631412650}
   m_Layer: 12
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2959,6 +2959,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0663186d6a6cd241a594d883c5de53b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MAX_HEALTH: 0
+  HEALTH: 0
+  ARMOR: 0
+  WARDING: 0
+  MOVE_SPEED: 0
 --- !u!114 &114628265072587176
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2970,6 +2975,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54753d8617f6d0d47a81a88505a756a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_InputDirection: {x: 0, y: 0, z: 0}
+  m_PreVelocity: {x: 0, y: 0, z: 0}
 --- !u!114 &114938520431525528
 MonoBehaviour:
   m_ObjectHideFlags: 1

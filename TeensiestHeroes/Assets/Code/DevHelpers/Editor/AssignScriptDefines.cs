@@ -22,6 +22,11 @@ public static class AssignScriptDefines {
     private static readonly string[] BUILD_DEFINES =
         {
         };
+    private static readonly string[] SERVER_DEBUG_DEFINES =
+        {
+        "SERVER",
+        "DEBUG_VERBOSE"
+        };
     private static readonly string[] SERVER_BUILD_DEFINES =
         {
         "SERVER"
@@ -34,27 +39,35 @@ public static class AssignScriptDefines {
     [MenuItem("Helper/DEBUG", false, 1)]
     public static void AssignDebug()
     {
-        AssignScriptDefine(DEBUG_DEFINES);
+        AssignScriptDefine(DEBUG_DEFINES, true);
         Debug.Log("[EDITOR] : Scripting Defines Set to <DEBUG>");
     }
 
     [MenuItem("Helper/RELEASE", false, 51)]
     public static void AssignRelease()
     {
-        AssignScriptDefine(RELEASE_DEFINES);
+        AssignScriptDefine(RELEASE_DEFINES,true);
         Debug.Log("[EDITOR] : Scripting Defines Set to <RELEASE>");
     }
 
     [MenuItem("Helper/BUILD", false, 101)]
     public static void AssignBuild()
     {
-        AssignScriptDefine(BUILD_DEFINES);
+        AssignScriptDefine(BUILD_DEFINES,true);
         Debug.Log("[EDITOR] : Scripting Defines Set to <BUILD>");
     }
-    [MenuItem("Helper/SERVER_BUILD", false, 101)]
+
+    [MenuItem("Helper/SERVER_DEBUG", false, 151)]
+    public static void AssignServerDebugBuild()
+    {
+        AssignScriptDefine(SERVER_DEBUG_DEFINES, true);
+        Debug.Log("[EDITOR] : Scripting Defines Set to <SERVER_BUILD>");
+    }
+
+    [MenuItem("Helper/SERVER_BUILD", false, 152)]
     public static void AssignServerBuild()
     {
-        AssignScriptDefine(BUILD_DEFINES);
+        AssignScriptDefine(SERVER_BUILD_DEFINES, true);
         Debug.Log("[EDITOR] : Scripting Defines Set to <SERVER_BUILD>");
     }
 
@@ -62,11 +75,20 @@ public static class AssignScriptDefines {
     /// The magic. Remove Scripting Defines
     /// </summary>
     /// <param name="inputDefines">Input define strings</param>
-    private static void AssignScriptDefine(string[] inputDefines)
+    private static void AssignScriptDefine(string[] inputDefines, bool clear = false)
     {
+        
         string definesString = PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
         List<string> allDefines = definesString.Split(';').ToList();
-        allDefines.AddRange(inputDefines.Except(allDefines));
+        if(!clear)
+        {
+            allDefines.AddRange(inputDefines.Except(allDefines));
+        }
+        else
+        {
+            allDefines.Clear();
+            allDefines.AddRange(inputDefines);
+        }
         PlayerSettings.SetScriptingDefineSymbolsForGroup(
             EditorUserBuildSettings.selectedBuildTargetGroup,
             string.Join(";", allDefines.ToArray()));

@@ -8,72 +8,72 @@ namespace BeardedManStudios.Forge.Networking.Generated
 	[GeneratedInterpol("{\"inter\":[0.3,0.25]")]
 	public partial class PlayerNetworkObject : NetworkObject
 	{
-		public const int IDENTITY = 5;
+		public const int IDENTITY = 3;
 
 		private byte[] _dirtyFields = new byte[1];
 
 		#pragma warning disable 0067
 		public event FieldChangedEvent fieldAltered;
 		#pragma warning restore 0067
-		private Vector3 _m_Position;
-		public event FieldEvent<Vector3> m_PositionChanged;
-		public InterpolateVector3 m_PositionInterpolation = new InterpolateVector3() { LerpT = 0.3f, Enabled = true };
-		public Vector3 m_Position
+		private Vector3 _mPosition;
+		public event FieldEvent<Vector3> mPositionChanged;
+		public InterpolateVector3 mPositionInterpolation = new InterpolateVector3() { LerpT = 0.3f, Enabled = true };
+		public Vector3 mPosition
 		{
-			get { return _m_Position; }
+			get { return _mPosition; }
 			set
 			{
 				// Don't do anything if the value is the same
-				if (_m_Position == value)
+				if (_mPosition == value)
 					return;
 
 				// Mark the field as dirty for the network to transmit
 				_dirtyFields[0] |= 0x1;
-				_m_Position = value;
+				_mPosition = value;
 				hasDirtyFields = true;
 			}
 		}
 
-		public void Setm_PositionDirty()
+		public void SetmPositionDirty()
 		{
 			_dirtyFields[0] |= 0x1;
 			hasDirtyFields = true;
 		}
 
-		private void RunChange_m_Position(ulong timestep)
+		private void RunChange_mPosition(ulong timestep)
 		{
-			if (m_PositionChanged != null) m_PositionChanged(_m_Position, timestep);
-			if (fieldAltered != null) fieldAltered("m_Position", _m_Position, timestep);
+			if (mPositionChanged != null) mPositionChanged(_mPosition, timestep);
+			if (fieldAltered != null) fieldAltered("mPosition", _mPosition, timestep);
 		}
-		private Quaternion _m_Rotation;
-		public event FieldEvent<Quaternion> m_RotationChanged;
-		public InterpolateQuaternion m_RotationInterpolation = new InterpolateQuaternion() { LerpT = 0.25f, Enabled = true };
-		public Quaternion m_Rotation
+		private Quaternion _mRotation;
+		public event FieldEvent<Quaternion> mRotationChanged;
+		public InterpolateQuaternion mRotationInterpolation = new InterpolateQuaternion() { LerpT = 0.25f, Enabled = true };
+		public Quaternion mRotation
 		{
-			get { return _m_Rotation; }
+			get { return _mRotation; }
 			set
 			{
 				// Don't do anything if the value is the same
-				if (_m_Rotation == value)
+				if (_mRotation == value)
 					return;
 
 				// Mark the field as dirty for the network to transmit
 				_dirtyFields[0] |= 0x2;
-				_m_Rotation = value;
+				_mRotation = value;
 				hasDirtyFields = true;
 			}
 		}
 
-		public void Setm_RotationDirty()
+		public void SetmRotationDirty()
 		{
 			_dirtyFields[0] |= 0x2;
 			hasDirtyFields = true;
 		}
 
-		private void RunChange_m_Rotation(ulong timestep)
+		private void RunChange_mRotation(ulong timestep)
 		{
-			if (m_RotationChanged != null) m_RotationChanged(_m_Rotation, timestep);
-			if (fieldAltered != null) fieldAltered("m_Rotation", _m_Rotation, timestep);
+			if (mRotationChanged != null) mRotationChanged(_mRotation, timestep);
+			if (fieldAltered != null) fieldAltered("mRotation", _mRotation, timestep);
 		}
 
 		protected override void OwnershipChanged()
@@ -84,30 +84,30 @@ namespace BeardedManStudios.Forge.Networking.Generated
 		
 		public void SnapInterpolations()
 		{
-			m_PositionInterpolation.current = m_PositionInterpolation.target;
-			m_RotationInterpolation.current = m_RotationInterpolation.target;
+			mPositionInterpolation.current = mPositionInterpolation.target;
+			mRotationInterpolation.current = mRotationInterpolation.target;
 		}
 
 		public override int UniqueIdentity { get { return IDENTITY; } }
 
 		protected override BMSByte WritePayload(BMSByte data)
 		{
-			UnityObjectMapper.Instance.MapBytes(data, _m_Position);
-			UnityObjectMapper.Instance.MapBytes(data, _m_Rotation);
+			UnityObjectMapper.Instance.MapBytes(data, _mPosition);
+			UnityObjectMapper.Instance.MapBytes(data, _mRotation);
 
 			return data;
 		}
 
 		protected override void ReadPayload(BMSByte payload, ulong timestep)
 		{
-			_m_Position = UnityObjectMapper.Instance.Map<Vector3>(payload);
-			m_PositionInterpolation.current = _m_Position;
-			m_PositionInterpolation.target = _m_Position;
-			RunChange_m_Position(timestep);
-			_m_Rotation = UnityObjectMapper.Instance.Map<Quaternion>(payload);
-			m_RotationInterpolation.current = _m_Rotation;
-			m_RotationInterpolation.target = _m_Rotation;
-			RunChange_m_Rotation(timestep);
+			_mPosition = UnityObjectMapper.Instance.Map<Vector3>(payload);
+			mPositionInterpolation.current = _mPosition;
+			mPositionInterpolation.target = _mPosition;
+			RunChange_mPosition(timestep);
+			_mRotation = UnityObjectMapper.Instance.Map<Quaternion>(payload);
+			mRotationInterpolation.current = _mRotation;
+			mRotationInterpolation.target = _mRotation;
+			RunChange_mRotation(timestep);
 		}
 
 		protected override BMSByte SerializeDirtyFields()
@@ -116,9 +116,9 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			dirtyFieldsData.Append(_dirtyFields);
 
 			if ((0x1 & _dirtyFields[0]) != 0)
-				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _m_Position);
+				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _mPosition);
 			if ((0x2 & _dirtyFields[0]) != 0)
-				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _m_Rotation);
+				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _mRotation);
 
 			return dirtyFieldsData;
 		}
@@ -133,28 +133,28 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 			if ((0x1 & readDirtyFlags[0]) != 0)
 			{
-				if (m_PositionInterpolation.Enabled)
+				if (mPositionInterpolation.Enabled)
 				{
-					m_PositionInterpolation.target = UnityObjectMapper.Instance.Map<Vector3>(data);
-					m_PositionInterpolation.Timestep = timestep;
+					mPositionInterpolation.target = UnityObjectMapper.Instance.Map<Vector3>(data);
+					mPositionInterpolation.Timestep = timestep;
 				}
 				else
 				{
-					_m_Position = UnityObjectMapper.Instance.Map<Vector3>(data);
-					RunChange_m_Position(timestep);
+					_mPosition = UnityObjectMapper.Instance.Map<Vector3>(data);
+					RunChange_mPosition(timestep);
 				}
 			}
 			if ((0x2 & readDirtyFlags[0]) != 0)
 			{
-				if (m_RotationInterpolation.Enabled)
+				if (mRotationInterpolation.Enabled)
 				{
-					m_RotationInterpolation.target = UnityObjectMapper.Instance.Map<Quaternion>(data);
-					m_RotationInterpolation.Timestep = timestep;
+					mRotationInterpolation.target = UnityObjectMapper.Instance.Map<Quaternion>(data);
+					mRotationInterpolation.Timestep = timestep;
 				}
 				else
 				{
-					_m_Rotation = UnityObjectMapper.Instance.Map<Quaternion>(data);
-					RunChange_m_Rotation(timestep);
+					_mRotation = UnityObjectMapper.Instance.Map<Quaternion>(data);
+					RunChange_mRotation(timestep);
 				}
 			}
 		}
@@ -164,15 +164,15 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			if (IsOwner)
 				return;
 
-			if (m_PositionInterpolation.Enabled && !m_PositionInterpolation.current.Near(m_PositionInterpolation.target, 0.0015f))
+			if (mPositionInterpolation.Enabled && !mPositionInterpolation.current.Near(mPositionInterpolation.target, 0.0015f))
 			{
-				_m_Position = (Vector3)m_PositionInterpolation.Interpolate();
-				RunChange_m_Position(m_PositionInterpolation.Timestep);
+				_mPosition = (Vector3)mPositionInterpolation.Interpolate();
+				RunChange_mPosition(mPositionInterpolation.Timestep);
 			}
-			if (m_RotationInterpolation.Enabled && !m_RotationInterpolation.current.Near(m_RotationInterpolation.target, 0.0015f))
+			if (mRotationInterpolation.Enabled && !mRotationInterpolation.current.Near(mRotationInterpolation.target, 0.0015f))
 			{
-				_m_Rotation = (Quaternion)m_RotationInterpolation.Interpolate();
-				RunChange_m_Rotation(m_RotationInterpolation.Timestep);
+				_mRotation = (Quaternion)mRotationInterpolation.Interpolate();
+				RunChange_mRotation(mRotationInterpolation.Timestep);
 			}
 		}
 

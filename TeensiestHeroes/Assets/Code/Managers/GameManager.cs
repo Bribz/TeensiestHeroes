@@ -19,6 +19,12 @@ public class GameManager : MonoBehaviour
     public TH_UIManager UIManager;
 
     public TH_PlayerManager PlayerManager;
+    public TH_UserConnection UserConnection;
+
+    #if SERVER
+    public TH_HitboxManager HitboxManager;
+    #endif
+
     #endregion
 
     #region Singleton_Management
@@ -65,10 +71,24 @@ public class GameManager : MonoBehaviour
             PlayerManager = gameObject.AddComponent<TH_PlayerManager>();
         }
 
+        #if SERVER
+        HitboxManager = GetComponent<TH_HitboxManager>();
+        if(!HitboxManager)
+        {
+            HitboxManager = gameObject.AddComponent<TH_HitboxManager>();
+        }
+        #endif
+
+        UserConnection = null;
+
         //Initialize Order
         instance.SceneManager.Initialize();
         instance.UIManager.Initialize();
         instance.PlayerManager.Initialize();
+
+        #if SERVER
+        instance.HitboxManager.Initialize();
+        #endif
 
         instance.SceneManager.LoadScene(1, false, false);
         

@@ -8,6 +8,7 @@ using UnityEngine;
 /// </summary>
 public class SpeedWeed : MonoBehaviour
 {
+
     private MeshFilter m_GrassMeshFilter;
     private Mesh m_GrassMesh;
     public Material m_GrassMaterial;
@@ -19,6 +20,7 @@ public class SpeedWeed : MonoBehaviour
     public float m_StartHeight = 1000;
     public bool SpawnGrass = false;
 
+#if !SERVER
     private void OnEnable()
     {
         m_LastPosition = new Vector3(0, -1000, 0);
@@ -34,6 +36,7 @@ public class SpeedWeed : MonoBehaviour
             var component = gameObject.AddComponent<MeshRenderer>();
             component.motionVectorGenerationMode = MotionVectorGenerationMode.Camera;
             component.material = m_GrassMaterial;
+            component.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.TwoSided;
         }
     }
 
@@ -78,7 +81,7 @@ public class SpeedWeed : MonoBehaviour
                         
                         grassPositions.Add(Origin);
                         //float col = Random.Range(.75f, 1f);
-                        grassColors.Add(new Color(Random.Range(0.417f, 0.48f), Random.Range(0.468f, 0.6f), Random.Range(0.07f, 0.17f), 1f));
+                        grassColors.Add(new Color(Random.Range(0.381f, 0.405f), Random.Range(0.578f, 0.598f), Random.Range(0.219f, 0.239f), 1f));
                         grassNormals.Add(hitInfo.normal);
                         
                         //matricies.Add(Matrix4x4.TRS(Origin, Quaternion.Euler(10,0,0), Vector3.one * .5f));
@@ -100,4 +103,5 @@ public class SpeedWeed : MonoBehaviour
         }
         //Graphics.DrawMeshInstanced(m_GrassMesh, 0, m_GrassMaterial, matricies);
     }
+#endif
 }

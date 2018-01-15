@@ -4,12 +4,15 @@ using UnityEngine;
 
 namespace BeardedManStudios.Forge.Networking.Generated
 {
-	[GeneratedRPC("{\"types\":[]")]
-	[GeneratedRPCVariableNames("{\"types\":[]")]
-	public abstract partial class NetworkCameraBehavior : NetworkBehavior
+	[GeneratedRPC("{\"types\":[[\"ulong\"][\"byte[]\"][\"ulong\"]]")]
+	[GeneratedRPCVariableNames("{\"types\":[[\"netID\"][\"PlayerInfo\"][\"UserID\"]]")]
+	public abstract partial class UserConnectionBehavior : NetworkBehavior
 	{
+		public const byte RPC_DISCONNECT = 0 + 5;
+		public const byte RPC_PLAYER_JOINED = 1 + 5;
+		public const byte RPC_PLAYER_LEFT = 2 + 5;
 		
-		public NetworkCameraNetworkObject networkObject = null;
+		public UserConnectionNetworkObject networkObject = null;
 
 		public override void Initialize(NetworkObject obj)
 		{
@@ -17,10 +20,13 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			if (networkObject != null && networkObject.AttachedBehavior != null)
 				return;
 			
-			networkObject = (NetworkCameraNetworkObject)obj;
+			networkObject = (UserConnectionNetworkObject)obj;
 			networkObject.AttachedBehavior = this;
 
 			base.SetupHelperRpcs(networkObject);
+			networkObject.RegisterRpc("Disconnect", Disconnect, typeof(ulong));
+			networkObject.RegisterRpc("PlayerJoined", PlayerJoined, typeof(byte[]));
+			networkObject.RegisterRpc("PlayerLeft", PlayerLeft, typeof(ulong));
 
 			MainThreadManager.Run(() =>
 			{
@@ -76,7 +82,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 		public override void Initialize(NetWorker networker, byte[] metadata = null)
 		{
-			Initialize(new NetworkCameraNetworkObject(networker, createCode: TempAttachCode, metadata: metadata));
+			Initialize(new UserConnectionNetworkObject(networker, createCode: TempAttachCode, metadata: metadata));
 		}
 
 		private void DestroyGameObject(NetWorker sender)
@@ -87,7 +93,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 		public override NetworkObject CreateNetworkObject(NetWorker networker, int createCode, byte[] metadata = null)
 		{
-			return new NetworkCameraNetworkObject(networker, this, createCode, metadata);
+			return new UserConnectionNetworkObject(networker, this, createCode, metadata);
 		}
 
 		protected override void InitializedTransform()
@@ -95,6 +101,21 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			networkObject.SnapInterpolations();
 		}
 
+		/// <summary>
+		/// Arguments:
+		/// ulong netID
+		/// </summary>
+		public abstract void Disconnect(RpcArgs args);
+		/// <summary>
+		/// Arguments:
+		/// byte[] PlayerInfo
+		/// </summary>
+		public abstract void PlayerJoined(RpcArgs args);
+		/// <summary>
+		/// Arguments:
+		/// ulong UserID
+		/// </summary>
+		public abstract void PlayerLeft(RpcArgs args);
 
 		// DO NOT TOUCH, THIS GETS GENERATED PLEASE EXTEND THIS CLASS IF YOU WISH TO HAVE CUSTOM CODE ADDITIONS
 	}

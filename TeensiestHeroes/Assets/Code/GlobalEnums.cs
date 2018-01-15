@@ -103,3 +103,11 @@ public enum WeaponType
 
     #endregion
 }
+
+public enum HitboxCallbackType
+{
+    OnEnter,
+    OnExit,
+    OnStay,
+    OnDispose
+}

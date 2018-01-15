@@ -13,6 +13,7 @@ using UnityEngine;
 using BeardedManStudios.Forge.Networking.Generated;
 using BeardedManStudios.Forge.Networking;
 using System;
+using Rewired;
 
 public class Player : PlayerBehavior
 {
@@ -21,12 +22,13 @@ public class Player : PlayerBehavior
     private const float BaseMoveSpeed = 5f;
     private const float MaxStepOffset = .75f;
 
+    private Rewired.Player m_RWPlayer;
     private VelocityHandler m_VelHandler;
     private AttackHandler p_AttackHandler;
     private Rigidbody m_RigidBody;
     private Quaternion m_RotateTo;
-    private Vector3 m_InputDirection;
-    private Vector3 m_PreVelocity;
+    [SerializeField] private Vector3 m_InputDirection;
+    [SerializeField] private Vector3 m_PreVelocity;
     private CameraController m_CamController;
     private bool initialized;
     #endregion
@@ -49,6 +51,7 @@ public class Player : PlayerBehavior
         {
             m_CamController = Camera.main.gameObject.GetComponent<CameraController>();
             m_CamController.SetFollowTarget(transform);
+            m_RWPlayer = ReInput.players.GetPlayer(0);
         }
         
         p_AttackHandler = GetComponent<AttackHandler>();
@@ -71,7 +74,7 @@ public class Player : PlayerBehavior
 
     private void HandleInput()
     {
-        m_InputDirection.Set(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        m_InputDirection.Set(m_RWPlayer.GetAxis("Axis_H"), 0, m_RWPlayer.GetAxis("Axis_V"));
         m_InputDirection.Normalize();
     }
 
@@ -101,7 +104,7 @@ public class Player : PlayerBehavior
             #endregion
             
             transform.position += CalculateVelocity();
-            networkObject.m_Position = transform.position;
+            networkObject.mPosition = transform.position;
             
             if (m_InputDirection != Vector3.zero)
             {
@@ -109,12 +112,12 @@ public class Player : PlayerBehavior
             }
 
             transform.rotation = Quaternion.Lerp(transform.rotation, m_RotateTo, (BaseMoveSpeed * 1.5f) * Time.deltaTime);
-            networkObject.m_Rotation = transform.rotation;
+            networkObject.mRotation = transform.rotation;
         }
         else
         {
-            transform.position = networkObject.m_Position;
-            transform.rotation = networkObject.m_Rotation;
+            transform.position = networkObject.mPosition;
+            transform.rotation = networkObject.mRotation;
         }
     }
 
@@ -125,7 +128,7 @@ public class Player : PlayerBehavior
         Vector3 retVal;
         int numVelocities = 0;
         //Calculate Input Velocity;
-        if (!p_AttackHandler.currentlyActing)
+        if (networkObject.IsOwner && !p_AttackHandler.currentlyActing)
         {
             m_PreVelocity = m_InputDirection * BaseMoveSpeed * Time.deltaTime;
             numVelocities++;
@@ -190,13 +193,15 @@ public class Player : PlayerBehavior
     public override void SendAbility(RpcArgs args)
     {
         //TODO: Handle Server Code
-    #if !SERVER
+#if !SERVER
         if(!GameManager.instance.PlayerManager.IsClient(networkObject.MyPlayerId))
         {
             p_AttackHandler.RPCAbility(args.GetNext<byte>());
         }
-    #else
-        networkObject.SendRpc(RPC_SEND_ABILITY, Receivers.OthersProximity, args.GetNext<byte>());
+#else
+        byte id = args.GetNext<byte>();
+        p_AttackHandler.RPCAbility(id);
+        networkObject.SendRpc(RPC_SEND_ABILITY, Receivers.OthersProximity, id);
     #endif
     }
 
@@ -211,6 +216,7 @@ public class Player : PlayerBehavior
         if (!GameManager.instance.PlayerManager.IsClient(networkObject.MyPlayerId))
         {
             //TODO: Handle animation playing
+            this.transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>().material.color = Color.red;
         }
     #else
             networkObject.SendRpc(RPC_SEND_ANIM, Receivers.OthersProximity, args.GetNext<byte>());
