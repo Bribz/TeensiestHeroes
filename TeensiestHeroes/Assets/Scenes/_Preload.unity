@@ -501,6 +501,7 @@ GameObject:
   - component: {fileID: 176}
   - component: {fileID: 160}
   - component: {fileID: 188}
+  - component: {fileID: 189}
   m_Layer: 8
   m_Name: GameManager
   m_TagString: Untagged
@@ -907,7 +908,7 @@ Transform:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 11}
-  m_LocalRotation: {x: -0.16931243, y: 0.7683082, z: -0.6032193, w: -0.13100445}
+  m_LocalRotation: {x: -0.16931245, y: 0.76830834, z: -0.60321933, w: -0.13100447}
   m_LocalPosition: {x: 1.56, y: -0.767, z: 1.077}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2424,7 +2425,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000011444092}
+  m_AnchoredPosition: {x: 0, y: 0.00007006526}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!224 &137
@@ -5268,7 +5269,6 @@ MonoBehaviour:
   UIManager: {fileID: 0}
   PlayerManager: {fileID: 0}
   UserConnection: {fileID: 0}
-  HitboxManager: {fileID: 0}
 --- !u!114 &177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5582,6 +5582,20 @@ MonoBehaviour:
   BOX_FILTER: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   CIRCLE_FILTER: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
   CONE_FILTER: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 30}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70b4531eee1c0f547b43db8b3d1e26f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DontChangeSceneOnConnect: 0
+  useInlineChat: 0
+  networkManager: {fileID: 0}
 --- !u!1 &2051259172
 GameObject:
   m_ObjectHideFlags: 0

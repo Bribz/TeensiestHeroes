@@ -53,34 +53,14 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator Init()
     {
-        SceneManager = GetComponent<TH_SceneManager>();
-        if(!SceneManager)
-        {
-            SceneManager = gameObject.AddComponent<TH_SceneManager>();
-        }
-
-        UIManager = GetComponent<TH_UIManager>();
-        if (!UIManager)
-        {
-            UIManager = gameObject.AddComponent<TH_UIManager>();
-        }
-
-        PlayerManager = GetComponent<TH_PlayerManager>();
-        if(!PlayerManager)
-        {
-            PlayerManager = gameObject.AddComponent<TH_PlayerManager>();
-        }
-
+        SceneManager = sFunc.AddGetComponent<TH_SceneManager>(instance.gameObject);
+        UIManager = sFunc.AddGetComponent<TH_UIManager>(instance.gameObject);
+        PlayerManager = sFunc.AddGetComponent<TH_PlayerManager>(instance.gameObject);
+        UserConnection = sFunc.AddGetComponent<TH_UserConnection>(instance.gameObject);
         #if SERVER
-        HitboxManager = GetComponent<TH_HitboxManager>();
-        if(!HitboxManager)
-        {
-            HitboxManager = gameObject.AddComponent<TH_HitboxManager>();
-        }
+        HitboxManager = sFunc.AddGetComponent<TH_HitboxManager>(instance.gameObject);
         #endif
-
-        UserConnection = null;
-
+        
         //Initialize Order
         instance.SceneManager.Initialize();
         instance.UIManager.Initialize();
