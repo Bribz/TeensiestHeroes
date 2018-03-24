@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
 
     #if SERVER
     public TH_HitboxManager HitboxManager;
+    internal TH_ServerManager ServerManager;
     #endif
 
     #endregion
@@ -59,17 +60,20 @@ public class GameManager : MonoBehaviour
         UserConnection = sFunc.AddGetComponent<TH_UserConnection>(instance.gameObject);
         #if SERVER
         HitboxManager = sFunc.AddGetComponent<TH_HitboxManager>(instance.gameObject);
+        ServerManager = sFunc.AddGetComponent<TH_ServerManager>(instance.gameObject);
         #endif
         
         //Initialize Order
         instance.SceneManager.Initialize();
         instance.UIManager.Initialize();
         instance.PlayerManager.Initialize();
+        instance.UserConnection.Initialize();
 
         #if SERVER
         instance.HitboxManager.Initialize();
+        instance.ServerManager.Initialize();
         #endif
-
+        
         instance.SceneManager.LoadScene(1, false, false);
         
         yield return null;

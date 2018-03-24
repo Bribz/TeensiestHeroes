@@ -13,23 +13,26 @@ public class TH_UserConnection : MonoBehaviour
 {
     public ulong USER_ID { get; private set; }
     public ulong PLAYER_NET_ID { get; private set;}
-    private bool connected;
-    private ushort port;
+    private bool connected = false;
+    private const ushort port = 7735;
     //
     internal NetWorker ServerNetWorker { get; private set; }
-    private string IP = "73.246.7.34";
+    private string IP = "127.0.0.1"; //73.246.7.34";
     private bool useMainThreadManagerForRPCs = true;
     public bool DontChangeSceneOnConnect = false;
     private string natServerHost = string.Empty;
     private ushort natServerPort = 7735;
     public bool useInlineChat = false;
     private NetworkManager mgr = null;
-    [HideInInspector] public GameObject networkManager = null;
+    public GameObject networkManager = null;
+
+    private static ulong currentPlayerIDCount = 1;
     //
 
     internal bool Initialize()
     {
         connected = true;
+        //port = 7735;
 
         NetWorker.PingForFirewall(port);
 
@@ -39,7 +42,7 @@ public class TH_UserConnection : MonoBehaviour
         return true;
     }
 
-    #if !SERVER
+#if !SERVER
     internal void Connect()
     {
         NetWorker client;
@@ -57,6 +60,8 @@ public class TH_UserConnection : MonoBehaviour
         else
             ((UDPClient)client).Connect(IP, port, natServerHost, natServerPort);
         //}
+            
+        client.binaryMessageReceived += ReadPacket;    
 
         client.serverAccepted += Client_serverAccepted;
         
@@ -90,11 +95,18 @@ public class TH_UserConnection : MonoBehaviour
 
         server.playerTimeout += (player, sender) =>
         {
-            Debug.Log("Player " + player.NetworkId + " timed out");
+            Log.Msg("Player " + player.NetworkId + " timed out");
+            
+            //TEMP: Handle removal of clients on timeout.
+            //TODO: Handle this with a delay of data unloading.
+            GameManager.instance.ServerManager.RemoveUserConnection(sender);
+
         };
         //LobbyService.Instance.Initialize(server);
 
         ServerNetWorker = server;
+
+        server.binaryMessageReceived += ReadPacket;
 
         server.playerAccepted += Server_playerAccepted;
 
@@ -118,7 +130,9 @@ public class TH_UserConnection : MonoBehaviour
         }
         else if (mgr == null)
             mgr = Instantiate(networkManager).GetComponent<NetworkManager>();
-        
+
+        mgr.Initialize(networker);
+
         if (useInlineChat && networker.IsServer)
             SceneManager.sceneLoaded += CreateInlineChat;
 
@@ -156,40 +170,120 @@ public class TH_UserConnection : MonoBehaviour
         int groupID = MessageGroupIds.START_OF_GENERIC_IDS + packetID;
         //ulong timestep = NetworkManager.Instance.Time.Timestep;
         Binary bin = new Binary(NetworkManager.Instance.Networker.Time.Timestep, false, dataPackage, Receivers.Server, groupID, false);
-
-        ((UDPServer)NetworkManager.Instance.Networker).Send(NetworkManager.Instance.Networker.FindPlayer(p => p.Networker == ServerNetWorker), bin);
+        var serverPlayer = NetworkManager.Instance.Networker.FindPlayer(p => p.Networker == ServerNetWorker);
+        ((UDPClient)NetworkManager.Instance.Networker).Send(bin);
     }
 
-    private void ReadPacket(NetworkingPlayer player, Binary frame)
+    private void ReadPacket(NetworkingPlayer player, Binary frame, NetWorker sender)
     {
+        //Log.Msg("Received Packet", 177);
         if (frame.GroupId < MessageGroupIds.START_OF_GENERIC_IDS + (int) PACKET_TYPE.LOGIN 
             || frame.GroupId > MessageGroupIds.START_OF_GENERIC_IDS + (int) PACKET_TYPE.DEFAULT)
         {
             return;
         }
-        
+
+        byte[] packetData = frame.GetData(false, player);
+        ushort packetID = BitConverter.ToUInt16(packetData, 0);
+
         //Handle Custom packets
-        //TODO: Handle Packet Receiving
-        #if SERVER
-        
-        #else
-        switch(frame.GroupId)
+#if SERVER
+        switch(packetID)
         {
-            case (int)PACKET_TYPE.LOGIN:
+            //TEMP: Handles a character selection from the menu. Currently just spits back a default character.
+            //TODO: Connect to database, parse for verbose character data, send back to client.
+            case (ushort)PACKET_TYPE.CHAR_PICK:
                 {
-                    LoginPacket packet = LoginPacket.DeSerialize(frame.GetData(false, player));
-                    USER_ID = packet.UserID;
+                    MainThreadManager.Run(() =>
+                    {
+                        Log.Msg("Received Character Selection Packet", 195);
+                        CharPickPacket packet = CharPickPacket.DeSerialize(frame.GetData(false, player));
+
+                        ulong uID = GameManager.instance.ServerManager.FindUserConnection(sender).UserID;
+
+                        CharDataPacket cdPacket = new CharDataPacket(0, new CharacterData("Test", packet.CharID, new EquipmentData(), Vector3.zero));
+
+                        //TODO: Get information for player. 
+                        //TEMP: Get CharData from cdpacket. assign character list index to UserConnection as foreign key. Assign entitystats after character object is made. 
+                        var newPlayerObj = GameManager.instance.ServerManager.CharacterFactory.Server_SpawnCharacter(uID, cdPacket.CharData);
+                        var accData = newPlayerObj.GetComponent<AccountStats>();
+                        cdPacket.netObjID = accData.NetObjID;
+
+                        //Redundant Call. Called by CharacterFactory.
+                        //int charDataID = GameManager.instance.ServerManager.AddCharacter(uID, 0, newPlayerObj.GetComponent<EntityStats>(), cdPacket.CharData); //HACK: TODO: Fix this line. It doesnt work.
+
+                        SendPacket_Server(cdPacket, player);
+                    });
                     break;
                 }
         }
-        #endif
+#else
+        switch(packetID)
+        {
+            case (ushort)PACKET_TYPE.LOGIN:
+                {
+                    if(sender != GameManager.instance.UserConnection.ServerNetWorker)
+                    {
+                        Log.Error("Received Login Packet from a networker besides the server!", 213);
+                        break;
+                    }
+                    MainThreadManager.Run(() => 
+                    { 
+                        Log.Msg("Received Login Packet", 227);
+                        LoginPacket packet = LoginPacket.DeSerialize(frame.GetData(false, player));
+                        USER_ID = packet.UserID;
+                    
+                        //TEMP: Replace with selected Character ID later.
+                        GameManager.instance.PlayerManager.SetClientCharacterID(USER_ID);
+                        
+                        //HACK: Sends character select packet to Server. Assumes that charID is default.
+                        CharPickPacket charPacket = new CharPickPacket();
+                        charPacket.CharID = packet.UserID;
+                        
+                        SendPacket(charPacket);
+                    });
+                    break;
+                }
+            case (ushort)PACKET_TYPE.CHAR_DATA:
+                {
+                    MainThreadManager.Run(() =>
+                    {
+                        Log.Msg("Received Char Data Packet", 246);
+                        CharDataPacket packet = CharDataPacket.DeSerialize(frame.GetData(false, player));
+                        CharacterData CharacterData = packet.CharData;
+
+                        NetworkBehavior netObj = (NetworkBehavior)NetworkManager.Instance.Networker.NetworkObjects[packet.netObjID].AttachedBehavior;
+
+                        AccountStats accStats = netObj.transform.GetComponent<AccountStats>();
+                        accStats.uID = CharacterData.CharacterID;
+                        accStats.CharacterID = CharacterData.CharacterID;
+                        accStats.NetObjID = packet.netObjID;
+                        accStats.NetPlayerID = NetworkManager.Instance.Networker.NetworkObjects[packet.netObjID].MyPlayerId;
+                        
+
+                        if (CharacterData.CharacterID == GameManager.instance.PlayerManager.CLIENT_CHARACTER_ID)
+                        {
+                            //TODO: Set new character to self.
+                            GameManager.instance.PlayerManager.SetClientPlayer((Player)netObj);
+                        }
+                    });
+                    break;
+                }
+        }
+#endif
     }
 
 #if SERVER
     private void Server_playerAccepted(NetworkingPlayer player, NetWorker sender)
     {
         LoginPacket packet = new LoginPacket();
-        //packet.UserID = 0;
+        packet.UserID = currentPlayerIDCount;
+        
+        //TEMP: Create new UserConnection in persistant data. 
+        //TODO: Handle this with a call to database to parse userID. Automate adding to persistant data.
+        GameManager.instance.ServerManager.AddUserConnection(currentPlayerIDCount, player.Networker, player);
+
+        currentPlayerIDCount += 1;
 
         SendPacket_Server(packet, player);
     }

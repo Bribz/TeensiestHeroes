@@ -880,6 +880,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4939048206253558}
+  - component: {fileID: 114048115270151316}
   - component: {fileID: 114564034469195336}
   - component: {fileID: 114628265072587176}
   - component: {fileID: 114277957173596610}
@@ -2904,6 +2905,20 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114048115270151316
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1666672132603804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93661d36600c7614489964c2b1fde2ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uID: 0
+  CharacterID: 0
+  NetPlayerID: 0
 --- !u!114 &114277957173596610
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2996,6 +3011,9 @@ MonoBehaviour:
   Dash: {fileID: 0}
   currentlyActing: 0
   currentlyDashing: 0
+  Debug_SwordWeapon: {fileID: 11400000, guid: e137c5d1f0239bd4bb3565c1f73ba34f, type: 2}
+  Debug_ShieldWeapon: {fileID: 11400000, guid: 83820ae7ab213974a85c6d77aab16992, type: 2}
+  Debug_Dash: {fileID: 11400000, guid: 88ff0b4a0bcab0741bb9ca4a054a39cf, type: 2}
 --- !u!136 &136801480516846664
 CapsuleCollider:
   m_ObjectHideFlags: 1

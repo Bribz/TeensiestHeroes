@@ -32,7 +32,10 @@ public class AttackHandler : MonoBehaviour
     public bool currentlyActing = false;
     public bool currentlyDashing = false;
 
-    
+    //TEMP: Placeholders.
+    public WeaponObject Debug_SwordWeapon;
+    public WeaponObject Debug_ShieldWeapon;
+    public DashAbility Debug_Dash;
 
     private void Awake()
     {

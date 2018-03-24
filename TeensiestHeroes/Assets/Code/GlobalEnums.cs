@@ -99,9 +99,12 @@ public enum WeaponType
     Wand,
     Lantern,
     Orb,
-    Tarot
+    Tarot,
 
     #endregion
+
+    Other,
+    None
 }
 
 public enum HitboxCallbackType

@@ -14,6 +14,7 @@ public class UI_Console : MonoBehaviour
     private CanvasGroup m_CanvasGroup;
     private string[] m_LastCommands;
     private int m_CommandIterator = 0;
+    [SerializeField] private bool m_ConsoleLogCapturing = false;
 
     private void Awake()
     {
@@ -96,6 +97,19 @@ public class UI_Console : MonoBehaviour
                     s.Append("Clearing Console...");
                     break;
                 }
+            case "logging(true)":
+                {
+                    m_ConsoleLogCapturing = true;
+                    Log.Log_Msg += ConsoleLog;
+                    s.Append("Console logging enabled.");
+                    break;
+                }
+            case "logging(false)":
+                {
+                    m_ConsoleLogCapturing = false;
+                    s.Append("Console logging disabled.");
+                    break;
+                }
 
             default:
                 {
@@ -113,6 +127,27 @@ public class UI_Console : MonoBehaviour
     {
         yield return new WaitForSeconds(3);
         Application.Quit(); 
+    }
+
+    public void ConsoleLog(string msg, bool error)
+    {
+        if (m_ConsoleLogCapturing)
+        {
+            GameObject textObj = GameObject.Instantiate(m_TextPrefab, m_ContentTransform);
+
+            textObj.GetComponent<Text>().text = msg;
+            if (error)
+            {
+                textObj.GetComponent<Text>().color = Color.red;
+            }
+        }
+    }
+
+    public void HandleConsoleOutput(String s)
+    {
+        GameObject textObj = GameObject.Instantiate(m_TextPrefab, m_ContentTransform);
+
+        textObj.GetComponent<Text>().text = s;
     }
 
     private void HandleConsoleOutput(StringBuilder strBuild)
@@ -133,5 +168,10 @@ public class UI_Console : MonoBehaviour
             }
         }
         children.ForEach(child => Destroy(child));
+    }
+
+    private void OnApplicationQuit()
+    {
+        Log.Log_Msg -= ConsoleLog;
     }
 }

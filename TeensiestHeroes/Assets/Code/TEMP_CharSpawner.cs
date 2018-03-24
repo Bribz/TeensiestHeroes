@@ -13,7 +13,7 @@ public class TEMP_CharSpawner : MonoBehaviour
     public IAbility Debug_ToolAbility;
     public DashAbility Debug_DashAbility;
 
-#if !SERVER
+#if false
     public void Start()
     {
         StartCoroutine(SpawnPlayer());

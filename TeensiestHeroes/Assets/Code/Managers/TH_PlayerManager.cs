@@ -7,7 +7,8 @@ using UnityEngine;
 public class TH_PlayerManager : IManager
 {
     #region Declaration Station
-    public Player CLIENT_PLAYER { get; private set; }
+    internal Player CLIENT_PLAYER { get; private set; }
+    internal ulong CLIENT_CHARACTER_ID { get; private set; }
     private List<Player> PlayersInMap;
     #endregion
 
@@ -22,6 +23,12 @@ public class TH_PlayerManager : IManager
         CLIENT_PLAYER = player;
     }
 
+    internal void SetClientCharacterID(ulong CharID)
+    {
+        CLIENT_CHARACTER_ID = CharID;
+    }
+
+    /*
     internal bool IsClient(uint myPlayerId)
     {
         if(CLIENT_PLAYER == null)
@@ -37,6 +44,24 @@ public class TH_PlayerManager : IManager
         }
 
         return CLIENT_PLAYER.networkObject.MyPlayerId == myPlayerId;
+    }
+    */
+
+    internal bool IsClient(ulong CharID)
+    {
+        if (CLIENT_PLAYER == null)
+        {
+            Log.Error("Client Player is null!", 26);
+
+            //TODO: Handle Cheating Prevention
+            #if !DEBUG_VERBOSE && !DEBUG_ERROR
+                Application.Quit();
+            #endif
+
+            return false;
+        }
+
+        return CLIENT_CHARACTER_ID == CharID;
     }
 
     public void AddPlayer(Player ply)

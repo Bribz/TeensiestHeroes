@@ -1,16 +1,41 @@
-﻿using System.Linq;
+﻿#if SERVER
+
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using BeardedManStudios.Forge.Networking;
 
-public class UserConnections
+public class UserConnections : IManager
 {
-#if !Server
-    private List<TH_UserConnection> ConnectionList;
+    private List<UserConnectionData> ConnectionList;
 
-    private void Awake()
+    internal override bool Initialize()
     {
+        ConnectionList = new List<UserConnectionData>();
+        return true;
+    }
 
+    internal void AddUserConnection(ulong uID, NetWorker networker, NetworkingPlayer netplayer)
+    {
+        UserConnectionData newData = new UserConnectionData(uID, networker, netplayer);
+        ConnectionList.Add(newData);
+    }
+
+    internal void RemoveUserConnection(ulong uID)
+    {
+        ConnectionList.Remove(ConnectionList.First(p => p.UserID == uID));
+    }
+
+    internal void RemoveUserConnection(NetWorker networker)
+    {
+        ConnectionList.Remove(ConnectionList.First(p => p.UserNetWorker == networker));
+    }
+
+    internal void RemoveUserConnection(NetworkingPlayer netplayer)
+    {
+        ConnectionList.Remove(ConnectionList.First(p => p.UserNetPlayer == netplayer));
     }
 
     /// <summary>
@@ -18,10 +43,25 @@ public class UserConnections
     /// </summary>
     /// <param name="player">Player Obj</param>
     /// <returns>User Connection</returns>
-    private TH_UserConnection FindUserConnection(Player player)
+    internal UserConnectionData FindUserConnection(ulong userID)
     {
-        return ConnectionList.FirstOrDefault<TH_UserConnection>(p => p.PLAYER_NET_ID == player.networkObject.NetworkId);
+        return ConnectionList.FirstOrDefault<UserConnectionData>(p => p.UserID == userID);
     }
 
-#endif
+    internal UserConnectionData FindUserConnection(NetWorker netWorker)
+    {
+        return ConnectionList.FirstOrDefault<UserConnectionData>(p => p.UserNetWorker == netWorker);
+    }
+
+    internal UserConnectionData FindUserConnection(NetworkingPlayer netplayer)
+    {
+        return ConnectionList.FirstOrDefault<UserConnectionData>(p => p.UserNetPlayer == netplayer);
+    }
+
+    internal void pUpdate()
+    {
+        //TODO: Upkeep
+    }
 }
+
+#endif

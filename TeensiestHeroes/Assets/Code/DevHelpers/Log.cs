@@ -17,6 +17,9 @@ using UnityEngine;
 /// </summary>
 public class Log : MonoBehaviour
 {
+    public delegate void LogEvent(string msg, bool error);
+    public static event LogEvent Log_Msg;
+
     /// <summary>
     /// Logs a message to Unity. NOTE: CALLING WITH LINE NUMBER FROM A COROUTINE WILL YIELD AN UNWANTED RESULT!
     /// </summary>
@@ -37,6 +40,10 @@ public class Log : MonoBehaviour
         }
         msg += _msg;
 
+        if(Log_Msg != null)
+        {
+            Log_Msg(msg, false);
+        }
         UnityEngine.Debug.Log(msg);
         #endif
     }
@@ -63,6 +70,10 @@ public class Log : MonoBehaviour
 
         error_msg += msg;
 
+        if (Log_Msg != null)
+        {
+            Log_Msg(error_msg, true);
+        }
         UnityEngine.Debug.LogError(error_msg);
         #endif
     }

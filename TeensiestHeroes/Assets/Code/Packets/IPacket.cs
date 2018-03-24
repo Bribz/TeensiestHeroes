@@ -1,19 +1,28 @@
 ﻿using BeardedManStudios;
+using BeardedManStudios.Forge.Networking;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 
-internal enum PACKET_TYPE
+internal enum PACKET_TYPE : ushort
 {
     LOGIN               =   0xF0,
+    CHAR_PICK           =   0xF1,
+    CHAR_DATA           =   0xF2,
     DEFAULT             =   0xFF
 }
 
 public abstract class IPacket
 {
-    internal virtual ushort PACKET_ID { get { return 0xFF; } }
+    internal virtual ushort PACKET_ID
+    {
+        get
+        {
+            return (ushort)PACKET_TYPE.DEFAULT;
+        }
+    }
 
     public IPacket()
     {

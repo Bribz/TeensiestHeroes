@@ -1,4 +1,5 @@
 ﻿using BeardedManStudios;
+using BeardedManStudios.Forge.Networking;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,20 +10,20 @@ public class LoginPacket : IPacket
     #region DATA
     public ulong UserID;
     #endregion
-    
-    public LoginPacket()
-    {
-        UserID = ulong.MinValue;
-    }
 
     internal override ushort PACKET_ID
     {
         get
         {
-            return 0xF0;
+            return (ushort)PACKET_TYPE.LOGIN;
         }
     }
 
+    public LoginPacket()
+    {
+        UserID = ulong.MinValue;
+    }
+    
     internal override BMSByte Serialize()
     {
         BMSByte retVal = new BMSByte();
@@ -36,7 +37,7 @@ public class LoginPacket : IPacket
     internal static LoginPacket DeSerialize(byte[] data)
     {
         LoginPacket packet = new LoginPacket();
-        packet.UserID = BitConverter.ToUInt64(data, sizeof(ushort));
+        packet.UserID = BitConverter.ToUInt64(data, sizeof(ushort)); // Offset by PACKET_ID
 
         return packet;
     }

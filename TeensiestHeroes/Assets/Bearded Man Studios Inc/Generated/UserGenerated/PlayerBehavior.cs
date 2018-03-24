@@ -1,3 +1,4 @@
+using System;
 using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Unity;
 using UnityEngine;
@@ -74,7 +75,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			}
 		}
 
-		protected override void CompleteRegistration()
+        protected override void CompleteRegistration()
 		{
 			base.CompleteRegistration();
 			networkObject.ReleaseCreateBuffer();

@@ -22,6 +22,8 @@ public class Player : PlayerBehavior
     private const float BaseMoveSpeed = 5f;
     private const float MaxStepOffset = .75f;
 
+    private EntityStats m_EntityStats;
+    private AccountStats m_AccountStats;
     private Rewired.Player m_RWPlayer;
     private VelocityHandler m_VelHandler;
     private AttackHandler p_AttackHandler;
@@ -46,14 +48,18 @@ public class Player : PlayerBehavior
         m_InputDirection = Vector3.zero;
         m_PreVelocity = Vector3.zero;
         m_RigidBody = GetComponent<Rigidbody>();
-
-        if(networkObject.IsOwner)
+        m_EntityStats = GetComponent<EntityStats>();
+        m_AccountStats = GetComponent<AccountStats>();
+    
+        #if !SERVER
+        if (networkObject.IsOwner)
         {
             m_CamController = Camera.main.gameObject.GetComponent<CameraController>();
             m_CamController.SetFollowTarget(transform);
             m_RWPlayer = ReInput.players.GetPlayer(0);
         }
-        
+        #endif
+
         p_AttackHandler = GetComponent<AttackHandler>();
         p_AttackHandler.SetNetworkObject(networkObject);
         m_VelHandler = new VelocityHandler();
@@ -64,7 +70,7 @@ public class Player : PlayerBehavior
     {
         if (!initialized) return;
 
-        if(networkObject.IsOwner)
+        if(m_AccountStats.IsClient())
         {
             HandleInput();
         }
@@ -80,7 +86,7 @@ public class Player : PlayerBehavior
 
     private void HandleMovement()
     {
-        if (networkObject.IsOwner)
+        if (m_AccountStats.IsClient())
         {
             #region Deprecated
             //m_PreVelocity = m_InputDirection * BaseMoveSpeed * Time.deltaTime; // *MoveSpeedMultiplier
@@ -101,7 +107,7 @@ public class Player : PlayerBehavior
 
             //  transform.position += (Vector3.up * (pointHeight.y - transform.position.y));
             //}
-            #endregion
+            #endregion  
             
             transform.position += CalculateVelocity();
             networkObject.mPosition = transform.position;
@@ -128,7 +134,7 @@ public class Player : PlayerBehavior
         Vector3 retVal;
         int numVelocities = 0;
         //Calculate Input Velocity;
-        if (networkObject.IsOwner && !p_AttackHandler.currentlyActing)
+        if (m_AccountStats.IsClient() && !p_AttackHandler.currentlyActing)
         {
             m_PreVelocity = m_InputDirection * BaseMoveSpeed * Time.deltaTime;
             numVelocities++;
@@ -156,7 +162,7 @@ public class Player : PlayerBehavior
 
         return retVal;
     }
-
+    
     #region VelocityHandler Functionality
     public int AddVelocity(Vector3 input)
     {
@@ -194,7 +200,7 @@ public class Player : PlayerBehavior
     {
         //TODO: Handle Server Code
 #if !SERVER
-        if(!GameManager.instance.PlayerManager.IsClient(networkObject.MyPlayerId))
+        if(m_AccountStats.IsClient())
         {
             p_AttackHandler.RPCAbility(args.GetNext<byte>());
         }
@@ -212,14 +218,14 @@ public class Player : PlayerBehavior
     public override void SendAnim(RpcArgs args)
     {
         //TODO: Handle Server Code
-    #if !SERVER
-        if (!GameManager.instance.PlayerManager.IsClient(networkObject.MyPlayerId))
+#if !SERVER
+        if (m_AccountStats.IsClient())
         {
             //TODO: Handle animation playing
             this.transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>().material.color = Color.red;
         }
-    #else
-            networkObject.SendRpc(RPC_SEND_ANIM, Receivers.OthersProximity, args.GetNext<byte>());
+#else
+        networkObject.SendRpc(RPC_SEND_ANIM, Receivers.OthersProximity, args.GetNext<byte>());
     #endif
     }
 
@@ -232,13 +238,13 @@ public class Player : PlayerBehavior
     {
         //TODO: Handle Server Code
 
-    #if !SERVER
-        if (!GameManager.instance.PlayerManager.IsClient(networkObject.MyPlayerId))
+#if !SERVER
+        if (m_AccountStats.IsClient())
         {
             //TODO: Handle animation playing
         }
-    #else
-            networkObject.SendRpc(RPC_SEND_EFFECTS, Receivers.OthersProximity, args.GetNext<byte[]>());
+#else
+        networkObject.SendRpc(RPC_SEND_EFFECTS, Receivers.OthersProximity, args.GetNext<byte[]>());
     #endif
     }
 
