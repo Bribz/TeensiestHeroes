@@ -49,9 +49,10 @@ public class TH_PlayerManager : IManager
 
     internal bool IsClient(ulong CharID)
     {
+        
         if (CLIENT_PLAYER == null)
         {
-            Log.Error("Client Player is null!", 26);
+            Log.Error("Client Player is null!", 54);
 
             //TODO: Handle Cheating Prevention
             #if !DEBUG_VERBOSE && !DEBUG_ERROR

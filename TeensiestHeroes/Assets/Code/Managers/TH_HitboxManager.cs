@@ -16,6 +16,7 @@ public class TH_HitboxManager : IManager
 
     internal override bool Initialize()
     {
+        GameObject_Pool = new List<GameObject>();
         return true;
     }
 

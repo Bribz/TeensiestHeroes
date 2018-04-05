@@ -14,6 +14,7 @@ using BeardedManStudios.Forge.Networking.Generated;
 using BeardedManStudios.Forge.Networking;
 using System;
 using Rewired;
+using BeardedManStudios.Forge.Networking.Unity;
 
 public class Player : PlayerBehavior
 {
@@ -32,7 +33,8 @@ public class Player : PlayerBehavior
     [SerializeField] private Vector3 m_InputDirection;
     [SerializeField] private Vector3 m_PreVelocity;
     private CameraController m_CamController;
-    private bool initialized;
+    private bool initialized = false;
+    private bool clientSetup = false;
     #endregion
 
     /// <summary>
@@ -50,27 +52,25 @@ public class Player : PlayerBehavior
         m_RigidBody = GetComponent<Rigidbody>();
         m_EntityStats = GetComponent<EntityStats>();
         m_AccountStats = GetComponent<AccountStats>();
-    
-        #if !SERVER
-        if (networkObject.IsOwner)
-        {
-            m_CamController = Camera.main.gameObject.GetComponent<CameraController>();
-            m_CamController.SetFollowTarget(transform);
-            m_RWPlayer = ReInput.players.GetPlayer(0);
-        }
-        #endif
-
         p_AttackHandler = GetComponent<AttackHandler>();
         p_AttackHandler.SetNetworkObject(networkObject);
         m_VelHandler = new VelocityHandler();
         initialized = true;
     }
 
+    public void HandleClientSetup()
+    {
+        m_CamController = Camera.main.gameObject.GetComponent<CameraController>();
+        m_CamController.SetFollowTarget(transform);
+        m_RWPlayer = ReInput.players.GetPlayer(0);
+        clientSetup = true;
+    }
+
     public void SuperUpdate()
     {
         if (!initialized) return;
 
-        if(m_AccountStats.IsClient())
+        if(clientSetup && m_AccountStats.IsClient())
         {
             HandleInput();
         }
@@ -86,7 +86,7 @@ public class Player : PlayerBehavior
 
     private void HandleMovement()
     {
-        if (m_AccountStats.IsClient())
+        if (clientSetup && m_AccountStats.IsClient())
         {
             #region Deprecated
             //m_PreVelocity = m_InputDirection * BaseMoveSpeed * Time.deltaTime; // *MoveSpeedMultiplier
@@ -134,7 +134,7 @@ public class Player : PlayerBehavior
         Vector3 retVal;
         int numVelocities = 0;
         //Calculate Input Velocity;
-        if (m_AccountStats.IsClient() && !p_AttackHandler.currentlyActing)
+        if (clientSetup && m_AccountStats.IsClient() && !p_AttackHandler.currentlyActing)
         {
             m_PreVelocity = m_InputDirection * BaseMoveSpeed * Time.deltaTime;
             numVelocities++;
@@ -200,14 +200,15 @@ public class Player : PlayerBehavior
     {
         //TODO: Handle Server Code
 #if !SERVER
-        if(m_AccountStats.IsClient())
+        if(clientSetup && m_AccountStats.IsClient())
         {
             p_AttackHandler.RPCAbility(args.GetNext<byte>());
         }
 #else
         byte id = args.GetNext<byte>();
         p_AttackHandler.RPCAbility(id);
-        networkObject.SendRpc(RPC_SEND_ABILITY, Receivers.OthersProximity, id);
+        
+        GameManager.instance.ServerManager.ReflectRPC(networkObject, m_AccountStats.uID, RPC_SEND_ABILITY, false, id);
     #endif
     }
 
@@ -219,7 +220,7 @@ public class Player : PlayerBehavior
     {
         //TODO: Handle Server Code
 #if !SERVER
-        if (m_AccountStats.IsClient())
+        if (clientSetup && m_AccountStats.IsClient())
         {
             //TODO: Handle animation playing
             this.transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>().material.color = Color.red;
@@ -239,7 +240,7 @@ public class Player : PlayerBehavior
         //TODO: Handle Server Code
 
 #if !SERVER
-        if (m_AccountStats.IsClient())
+        if (clientSetup && m_AccountStats.IsClient())
         {
             //TODO: Handle animation playing
         }

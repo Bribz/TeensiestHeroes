@@ -35,6 +35,7 @@ public class CharacterFactory
         //GameObject newCharacter = GameObject.Instantiate(m_CharacterBase);
 
         var pBh = NetworkManager.Instance.InstantiatePlayer(position: Vector3.zero + Vector3.up);
+        pBh.networkObject.AssignOwnership(GameManager.instance.ServerManager.FindUserConnection(UserID).UserNetPlayer);
 
         GameObject newCharacter = pBh.gameObject;
 

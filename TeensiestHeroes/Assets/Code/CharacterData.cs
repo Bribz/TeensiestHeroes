@@ -70,9 +70,11 @@ public class CharacterData
     internal BMSByte Serialize()
     {
         byte charNameSize = (byte)CharacterName.Length;
-
         BMSByte retVal = new BMSByte();
-        retVal.Append(new byte[] { charNameSize });
+
+        byte[] temp = new byte[] { charNameSize };
+
+        retVal.Append(new byte[] {charNameSize});
         retVal.Append(Encoding.UTF8.GetBytes(CharacterName));
         retVal.Append(BitConverter.GetBytes(CharacterID));
         retVal.Append(BitConverter.GetBytes(MapID));
@@ -100,7 +102,7 @@ public class CharacterData
         currentIndex += sizeof(ulong);
 
         MapID = BitConverter.ToUInt32(byteData, currentIndex);
-        currentIndex += sizeof(ulong);
+        currentIndex += sizeof(uint);
 
         float mapPosX = BitConverter.ToSingle(byteData, currentIndex);
         currentIndex += sizeof(float);

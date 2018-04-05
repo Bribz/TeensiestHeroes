@@ -273,7 +273,7 @@ public class AttackHandler : MonoBehaviour
                     {
                         SetCooldown(AbilityType.MainHand_Primary);
                         MainHand_1.Activate();
-                        p_networkObject.SendRpc(Player.RPC_SEND_ABILITY, Receivers.All, (byte)0x0);
+                        p_networkObject.SendRpc(Player.RPC_SEND_ABILITY, Receivers.Server, (byte)0x0);
                     }
                 }
                 else
@@ -293,7 +293,7 @@ public class AttackHandler : MonoBehaviour
                     {
                         SetCooldown(AbilityType.MainHand_Secondary);
                         MainHand_2.Activate();
-                        p_networkObject.SendRpc(Player.RPC_SEND_ABILITY, Receivers.All, (byte)0x1);
+                        p_networkObject.SendRpc(Player.RPC_SEND_ABILITY, Receivers.Server, (byte)0x1);
                     }
                 }
                 else
@@ -313,7 +313,7 @@ public class AttackHandler : MonoBehaviour
                     {
                         SetCooldown(AbilityType.OffHand);
                         OffHand_1.Activate();
-                        p_networkObject.SendRpc(Player.RPC_SEND_ABILITY, Receivers.All, (byte)0x2);
+                        p_networkObject.SendRpc(Player.RPC_SEND_ABILITY, Receivers.Server, (byte)0x2);
                     }
                 }
                 else
@@ -333,7 +333,7 @@ public class AttackHandler : MonoBehaviour
                     {
                         SetCooldown(AbilityType.Class);
                         Class.Activate();
-                        p_networkObject.SendRpc(Player.RPC_SEND_ABILITY, Receivers.All, (byte)0x3);
+                        p_networkObject.SendRpc(Player.RPC_SEND_ABILITY, Receivers.Server, (byte)0x3);
                     }
                 }
                 else
@@ -353,7 +353,7 @@ public class AttackHandler : MonoBehaviour
                     {
                         SetCooldown(AbilityType.Dash);
                         Dash.Activate();
-                        p_networkObject.SendRpc(Player.RPC_SEND_ABILITY, Receivers.All, (byte)0x5);
+                        p_networkObject.SendRpc(Player.RPC_SEND_ABILITY, Receivers.Server, (byte)0x5);
                     }
                 }
                 else
@@ -374,7 +374,7 @@ public class AttackHandler : MonoBehaviour
                     {
                         SetCooldown(AbilityType.Tool);
                         Tool.Activate();
-                        p_networkObject.SendRpc(Player.RPC_SEND_ABILITY, Receivers.All, (byte)0x4);
+                        p_networkObject.SendRpc(Player.RPC_SEND_ABILITY, Receivers.Server, (byte)0x4);
                     }
                 }
                 else

@@ -9,7 +9,7 @@ using BeardedManStudios.Forge.Networking;
 
 public class UserConnections : IManager
 {
-    private List<UserConnectionData> ConnectionList;
+    internal List<UserConnectionData> ConnectionList;
 
     internal override bool Initialize()
     {

@@ -1,5 +1,6 @@
 ﻿#if SERVER
 using BeardedManStudios.Forge.Networking;
+using BeardedManStudios.Forge.Networking.Unity;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -126,6 +127,20 @@ internal class TH_ServerManager : IManager
     }
 
     #endregion
+
+    internal void ReflectRPC(NetworkObject netObject, ulong senderUID, byte methodID, bool buffered, params object[] rpcArgs)
+    {
+        //Make it simple to read
+        bool isBuffered = !buffered;
+
+        foreach(var userConnection in CONNECTION_BASE.ConnectionList)
+        {
+            if (userConnection.UserID != senderUID)
+            {
+                netObject.SendRpc(userConnection.UserNetPlayer, isBuffered, methodID, rpcArgs);
+            }
+        }
+    }
 
 }
 #endif

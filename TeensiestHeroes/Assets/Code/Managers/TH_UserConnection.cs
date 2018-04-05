@@ -252,25 +252,68 @@ public class TH_UserConnection : MonoBehaviour
                         CharDataPacket packet = CharDataPacket.DeSerialize(frame.GetData(false, player));
                         CharacterData CharacterData = packet.CharData;
 
-                        NetworkBehavior netObj = (NetworkBehavior)NetworkManager.Instance.Networker.NetworkObjects[packet.netObjID].AttachedBehavior;
-
-                        AccountStats accStats = netObj.transform.GetComponent<AccountStats>();
-                        accStats.uID = CharacterData.CharacterID;
-                        accStats.CharacterID = CharacterData.CharacterID;
-                        accStats.NetObjID = packet.netObjID;
-                        accStats.NetPlayerID = NetworkManager.Instance.Networker.NetworkObjects[packet.netObjID].MyPlayerId;
-                        
-
-                        if (CharacterData.CharacterID == GameManager.instance.PlayerManager.CLIENT_CHARACTER_ID)
+                        if(!NetworkManager.Instance.Networker.NetworkObjects.ContainsKey(packet.netObjID))
                         {
-                            //TODO: Set new character to self.
-                            GameManager.instance.PlayerManager.SetClientPlayer((Player)netObj);
+                            StartCoroutine(WaitToAssignCharacterStats(packet, CharacterData));
+                        }
+                        else
+                        {
+                            NetworkBehavior netObj = (NetworkBehavior)NetworkManager.Instance.Networker.NetworkObjects[packet.netObjID].AttachedBehavior;
+
+                            AccountStats accStats = netObj.transform.GetComponent<AccountStats>();
+                            accStats.uID = CharacterData.CharacterID;
+                            accStats.CharacterID = CharacterData.CharacterID;
+                            accStats.NetObjID = packet.netObjID;
+                            accStats.NetPlayerID = NetworkManager.Instance.Networker.NetworkObjects[packet.netObjID].MyPlayerId;
+
+                            AttackHandler atkHandler = netObj.transform.GetComponent<AttackHandler>();
+                            //TEMP: Initializing with debug weapons.
+                            //TODO: Change this with weapons from equipment data
+                            atkHandler.Initialize(atkHandler.Debug_SwordWeapon, atkHandler.Debug_ShieldWeapon);
+                            atkHandler.Initialize(atkHandler.Debug_Dash);
+
+                            //Set Character to clients self character
+                            if (CharacterData.CharacterID == GameManager.instance.PlayerManager.CLIENT_CHARACTER_ID)
+                            {
+                                GameManager.instance.PlayerManager.SetClientPlayer((Player)netObj);
+                                ((Player)netObj).HandleClientSetup();
+                            }
+                            
                         }
                     });
                     break;
                 }
         }
 #endif
+    }
+
+    private IEnumerator WaitToAssignCharacterStats(CharDataPacket packet, CharacterData CharacterData)
+    {
+        while(!NetworkManager.Instance.Networker.NetworkObjects.ContainsKey(packet.netObjID))
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        NetworkBehavior netObj = (NetworkBehavior)NetworkManager.Instance.Networker.NetworkObjects[packet.netObjID].AttachedBehavior;
+
+        AccountStats accStats = netObj.transform.GetComponent<AccountStats>();
+        accStats.uID = CharacterData.CharacterID;
+        accStats.CharacterID = CharacterData.CharacterID;
+        accStats.NetObjID = packet.netObjID;
+        accStats.NetPlayerID = NetworkManager.Instance.Networker.NetworkObjects[packet.netObjID].MyPlayerId;
+
+        AttackHandler atkHandler = netObj.transform.GetComponent<AttackHandler>();
+        //TEMP: Initializing with debug weapons.
+        //TODO: Change this with weapons from equipment data
+        atkHandler.Initialize(atkHandler.Debug_SwordWeapon, atkHandler.Debug_ShieldWeapon);
+        atkHandler.Initialize(atkHandler.Debug_Dash);
+
+        //Set Character to clients self character
+        if (CharacterData.CharacterID == GameManager.instance.PlayerManager.CLIENT_CHARACTER_ID)
+        {
+            GameManager.instance.PlayerManager.SetClientPlayer((Player)netObj);
+            ((Player)netObj).HandleClientSetup();
+        }
     }
 
 #if SERVER
@@ -282,7 +325,7 @@ public class TH_UserConnection : MonoBehaviour
         //TEMP: Create new UserConnection in persistant data. 
         //TODO: Handle this with a call to database to parse userID. Automate adding to persistant data.
         GameManager.instance.ServerManager.AddUserConnection(currentPlayerIDCount, player.Networker, player);
-
+        Log.Msg(String.Format("[FORGE] Player Accepted by Server! <{0}>", player.Ip));
         currentPlayerIDCount += 1;
 
         SendPacket_Server(packet, player);

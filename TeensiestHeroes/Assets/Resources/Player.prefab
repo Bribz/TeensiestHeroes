@@ -2919,6 +2919,7 @@ MonoBehaviour:
   uID: 0
   CharacterID: 0
   NetPlayerID: 0
+  NetObjID: 0
 --- !u!114 &114277957173596610
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3008,7 +3009,7 @@ MonoBehaviour:
   OffHand_1: {fileID: 0}
   Class: {fileID: 0}
   Tool: {fileID: 0}
-  Dash: {fileID: 0}
+  Dash: {fileID: 11400000, guid: 88ff0b4a0bcab0741bb9ca4a054a39cf, type: 2}
   currentlyActing: 0
   currentlyDashing: 0
   Debug_SwordWeapon: {fileID: 11400000, guid: e137c5d1f0239bd4bb3565c1f73ba34f, type: 2}

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
 using System.Linq;
+using System;
 
 /// <summary>
 /// Editor tool for assigning Script Define symbols via a click.
@@ -40,35 +41,35 @@ public static class AssignScriptDefines {
     public static void AssignDebug()
     {
         AssignScriptDefine(DEBUG_DEFINES, true);
-        Debug.Log("[EDITOR] : Scripting Defines Set to <DEBUG>");
+        Debug.Log(string.Format("[EDITOR] : Scripting Defines Set to <DEBUG> [{0}]", DateTime.Now.ToShortTimeString()));
     }
 
     [MenuItem("Helper/RELEASE", false, 51)]
     public static void AssignRelease()
     {
         AssignScriptDefine(RELEASE_DEFINES,true);
-        Debug.Log("[EDITOR] : Scripting Defines Set to <RELEASE>");
+        Debug.Log(string.Format("[EDITOR] : Scripting Defines Set to <RELEASE> [{0}]", DateTime.Now.ToShortTimeString()));
     }
 
     [MenuItem("Helper/BUILD", false, 101)]
     public static void AssignBuild()
     {
         AssignScriptDefine(BUILD_DEFINES,true);
-        Debug.Log("[EDITOR] : Scripting Defines Set to <BUILD>");
+        Debug.Log(string.Format("[EDITOR] : Scripting Defines Set to <BUILD> [{0}]", DateTime.Now.ToShortTimeString()));
     }
 
     [MenuItem("Helper/SERVER_DEBUG", false, 151)]
     public static void AssignServerDebugBuild()
     {
         AssignScriptDefine(SERVER_DEBUG_DEFINES, true);
-        Debug.Log("[EDITOR] : Scripting Defines Set to <SERVER_BUILD>");
+        Debug.Log(string.Format("[EDITOR] : Scripting Defines Set to <SERVER_DEBUG> [{0}]", DateTime.Now.ToShortTimeString()));
     }
 
     [MenuItem("Helper/SERVER_BUILD", false, 152)]
     public static void AssignServerBuild()
     {
         AssignScriptDefine(SERVER_BUILD_DEFINES, true);
-        Debug.Log("[EDITOR] : Scripting Defines Set to <SERVER_BUILD>");
+        Debug.Log(string.Format("[EDITOR] : Scripting Defines Set to <SERVER_BUILD> [{0}]", DateTime.Now.ToShortTimeString()));
     }
 
     /// <summary>
