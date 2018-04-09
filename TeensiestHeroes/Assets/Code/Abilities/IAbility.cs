@@ -7,22 +7,31 @@ using UnityEngine;
 /// Apparently Unity doesn't like ScriptableObject classes being abstract if theyre getting made in the Editor, so something to note.
 /// </summary>
 [System.Serializable]
-public abstract class IAbility : ScriptableObject
+public class IAbility : ScriptableObject
 {
     public ParticleSystem[] Ability_Particles;
     public Texture2D Ability_Icon                   = null;
     public string Ability_Name                      = "";
     public float Ability_Cooldown                   = 0f;
 
-    public abstract void Initialize();
+    public virtual void Initialize()
+    { }
 
-    public abstract void Initialize(AttackHandler atkHandler);
+    public virtual void Initialize(AttackHandler atkHandler)
+    { }
 
-    public abstract void Activate();
+    public virtual void Activate()
+    { }
 
-    public abstract void Callback();
+    public virtual void Callback()
+    { }
 
-    public abstract void Cancel();
+    public virtual void Cancel()
+    { }
 
-    public abstract void Cleanup();
+    public virtual void Cleanup()
+    { }
+
+    public virtual object CreateRTInstance()
+    { return null; }
 }

@@ -38,6 +38,7 @@ public class Hitbox : MonoBehaviour
 
         m_ShouldLinger = false;
         gameObject.SetActive(false);
+        Destroy(gameObject);
     }
 
     public void Update()

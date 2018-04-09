@@ -1,12 +1,11 @@
-using System;
 using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Unity;
 using UnityEngine;
 
 namespace BeardedManStudios.Forge.Networking.Generated
 {
-	[GeneratedRPC("{\"types\":[[\"byte\"][\"byte\"][\"byte[]\"]]")]
-	[GeneratedRPCVariableNames("{\"types\":[[\"ID\"][\"ID\"][\"serialData\"]]")]
+	[GeneratedRPC("{\"types\":[[\"byte\", \"uint\"][\"byte\", \"uint\"][\"byte[]\", \"uint\"]]")]
+	[GeneratedRPCVariableNames("{\"types\":[[\"ID\", \"netID\"][\"ID\", \"netID\"][\"serialData\", \"netID\"]]")]
 	public abstract partial class PlayerBehavior : NetworkBehavior
 	{
 		public const byte RPC_SEND_ABILITY = 0 + 5;
@@ -25,9 +24,9 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			networkObject.AttachedBehavior = this;
 
 			base.SetupHelperRpcs(networkObject);
-			networkObject.RegisterRpc("SendAbility", SendAbility, typeof(byte));
-			networkObject.RegisterRpc("SendAnim", SendAnim, typeof(byte));
-			networkObject.RegisterRpc("SendEffects", SendEffects, typeof(byte[]));
+			networkObject.RegisterRpc("SendAbility", SendAbility, typeof(byte), typeof(uint));
+			networkObject.RegisterRpc("SendAnim", SendAnim, typeof(byte), typeof(uint));
+			networkObject.RegisterRpc("SendEffects", SendEffects, typeof(byte[]), typeof(uint));
 
 			MainThreadManager.Run(() =>
 			{
@@ -75,7 +74,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			}
 		}
 
-        protected override void CompleteRegistration()
+		protected override void CompleteRegistration()
 		{
 			base.CompleteRegistration();
 			networkObject.ReleaseCreateBuffer();
@@ -105,16 +104,19 @@ namespace BeardedManStudios.Forge.Networking.Generated
 		/// <summary>
 		/// Arguments:
 		/// byte ID
+		/// uint netID
 		/// </summary>
 		public abstract void SendAbility(RpcArgs args);
 		/// <summary>
 		/// Arguments:
 		/// byte ID
+		/// uint netID
 		/// </summary>
 		public abstract void SendAnim(RpcArgs args);
 		/// <summary>
 		/// Arguments:
 		/// byte[] serialData
+		/// uint netID
 		/// </summary>
 		public abstract void SendEffects(RpcArgs args);
 

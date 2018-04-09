@@ -17,7 +17,7 @@ public class TH_UserConnection : MonoBehaviour
     private const ushort port = 7735;
     //
     internal NetWorker ServerNetWorker { get; private set; }
-    private string IP = "127.0.0.1"; //73.246.7.34";
+    private string IP = "10.0.16.116"; //"127.0.0.1"; //73.246.7.34";
     private bool useMainThreadManagerForRPCs = true;
     public bool DontChangeSceneOnConnect = false;
     private string natServerHost = string.Empty;
@@ -27,6 +27,7 @@ public class TH_UserConnection : MonoBehaviour
     public GameObject networkManager = null;
 
     private static ulong currentPlayerIDCount = 1;
+    public ulong currentPlayerIDCountDEBUG = 1;
     //
 
     internal bool Initialize()
@@ -199,7 +200,8 @@ public class TH_UserConnection : MonoBehaviour
                         Log.Msg("Received Character Selection Packet", 195);
                         CharPickPacket packet = CharPickPacket.DeSerialize(frame.GetData(false, player));
 
-                        ulong uID = GameManager.instance.ServerManager.FindUserConnection(sender).UserID;
+                        //ulong uID = GameManager.instance.ServerManager.FindUserConnection(sender).UserID;
+                        ulong uID = packet.CharID;
 
                         CharDataPacket cdPacket = new CharDataPacket(0, new CharacterData("Test", packet.CharID, new EquipmentData(), Vector3.zero));
 
@@ -321,12 +323,17 @@ public class TH_UserConnection : MonoBehaviour
     {
         LoginPacket packet = new LoginPacket();
         packet.UserID = currentPlayerIDCount;
+
         
+
         //TEMP: Create new UserConnection in persistant data. 
         //TODO: Handle this with a call to database to parse userID. Automate adding to persistant data.
         GameManager.instance.ServerManager.AddUserConnection(currentPlayerIDCount, player.Networker, player);
         Log.Msg(String.Format("[FORGE] Player Accepted by Server! <{0}>", player.Ip));
         currentPlayerIDCount += 1;
+
+        //DELETE THIS AFTER TESTING
+        currentPlayerIDCountDEBUG = currentPlayerIDCount;
 
         SendPacket_Server(packet, player);
     }

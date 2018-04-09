@@ -40,9 +40,10 @@ public class TH_HitboxManager : IManager
         }
     }
 
-    public Hitbox MakeHitbox(HitboxData data, Vector3 Position, float scale)
+    public Hitbox MakeHitbox(HitboxData data, Vector3 Position, float scale, GameObject owner)
     {
         GameObject obj = new GameObject();
+        obj.layer = LayerMask.NameToLayer("Hitbox");
         obj.transform.position = Position;
         obj.transform.rotation = Quaternion.identity;
         obj.transform.localScale = new Vector3(scale, scale, scale);
@@ -51,14 +52,17 @@ public class TH_HitboxManager : IManager
 
         SetColliderAndRenderer(obj, data.Shape, data.isTrigger, data.ShouldHitSelf);
         var script = HandleHitboxScript(obj, data);
+        script.DATA.Owner_Controller = owner.GetComponent<Player>();
+        script.DATA.Owner_Stats = owner.GetComponent<EntityStats>();
 
         GameObject_Pool.Add(obj);
         return script;
     }
     
-    public Hitbox MakeHitbox(HitboxData data, Vector3 Origin, Vector3 Direction, float distance, float scale)
+    public Hitbox MakeHitbox(HitboxData data, Vector3 Origin, Vector3 Direction, float distance, float scale, GameObject owner)
     {
         GameObject obj = new GameObject();
+        obj.layer = LayerMask.NameToLayer("Hitbox");
         obj.transform.position = Origin + (Direction * distance);
         obj.transform.rotation = Quaternion.LookRotation(Direction, Vector3.up);
         obj.transform.localScale = new Vector3(scale, scale, scale);
@@ -67,6 +71,7 @@ public class TH_HitboxManager : IManager
 
         SetColliderAndRenderer(obj, data.Shape, data.isTrigger, data.ShouldHitSelf);
         var script = HandleHitboxScript(obj, data);
+        
 
         GameObject_Pool.Add(obj);
 

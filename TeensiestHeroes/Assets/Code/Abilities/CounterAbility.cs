@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SimpleWeaponAbility : WeaponAbility
+public class CounterAbility : WeaponAbility
 {
-    internal SimpleWeaponHandler handler;
+    internal CounterAbilityHandler handler;
     internal AttackHandler atkHandler;
 
     public HitboxData Hitbox;
     public PlayerEffect PlayerEffect;
     public float Hitbox_StartUpTime;
     public float PlayerEffect_StartUpTime;
-    
+
     public override void Activate()
     {
         Log.Msg(string.Format("Player used skill[{0}]", Ability_Name));
-        if(handler)
+        if (handler)
         {
             handler.Activate();
         }
@@ -24,7 +23,7 @@ public class SimpleWeaponAbility : WeaponAbility
 
     public override void Callback()
     {
-        handler.Callback(); 
+        handler.Callback();
     }
 
     public override void Cancel()
@@ -41,21 +40,17 @@ public class SimpleWeaponAbility : WeaponAbility
     public override void Initialize(AttackHandler atkHandler)
     {
         this.atkHandler = atkHandler;
-        handler = atkHandler.gameObject.AddComponent<SimpleWeaponHandler>();
-        handler.Initialize(this); 
+        handler = atkHandler.gameObject.AddComponent<CounterAbilityHandler>();
+        handler.Initialize(this);
     }
 
-    /// <summary>
-    /// Returns a Runtime Instance of the ability. Must be converted.
-    /// </summary>
-    /// <returns>Object of Ability. Convert to relevant type</returns>
     public override object CreateRTInstance()
     {
-        SimpleWeaponAbility data = ScriptableObject.CreateInstance(typeof(SimpleWeaponAbility)) as SimpleWeaponAbility;
+        var data = ScriptableObject.CreateInstance<CounterAbility>() as CounterAbility;
 
         if (Ability_Combo_Next != null)
         {
-            SimpleWeaponAbility comboNext = Ability_Combo_Next.CreateRTInstance() as SimpleWeaponAbility;
+            var comboNext = Ability_Combo_Next.CreateRTInstance() as SimpleWeaponAbility;
             data.Ability_Combo_Next = comboNext;
         }
 
@@ -68,7 +63,7 @@ public class SimpleWeaponAbility : WeaponAbility
         data.Hitbox_StartUpTime = Hitbox_StartUpTime;
         data.PlayerEffect = PlayerEffect;
         data.PlayerEffect_StartUpTime = PlayerEffect_StartUpTime;
-        
+
         return data;
     }
 }

@@ -12,4 +12,6 @@ public class HitboxData
     public CrowdControl[] Crowd_Control;
     public bool ShouldHitSelf;
     public bool isTrigger;
+    public EntityStats Owner_Stats;
+    public Player Owner_Controller;
 }

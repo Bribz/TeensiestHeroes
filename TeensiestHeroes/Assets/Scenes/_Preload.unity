@@ -2424,7 +2424,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0.0000045001507}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!224 &137
@@ -5269,6 +5269,7 @@ MonoBehaviour:
   UIManager: {fileID: 0}
   PlayerManager: {fileID: 0}
   UserConnection: {fileID: 0}
+  HitboxManager: {fileID: 0}
 --- !u!114 &177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5596,6 +5597,7 @@ MonoBehaviour:
   DontChangeSceneOnConnect: 0
   useInlineChat: 0
   networkManager: {fileID: 186558, guid: 79adc0da5b6caf74990d862696696ecd, type: 2}
+  currentPlayerIDCountDEBUG: 1
 --- !u!1 &1810891574
 GameObject:
   m_ObjectHideFlags: 0

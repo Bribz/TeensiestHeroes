@@ -16,5 +16,13 @@ MonoBehaviour:
   Ability_Name: Lunge
   Ability_Cooldown: 6.5
   Ability_Combo_Next: {fileID: 0}
-  Hitbox_StartUpTime: 0
-  PlayerEffect_StartUpTime: 0
+  Hitbox:
+    Particles: []
+    Shape: 0
+    Hitbox_Linger: 0.3
+    Hitbox_Damage: 5
+    Crowd_Control: []
+    ShouldHitSelf: 0
+    isTrigger: 1
+  Hitbox_StartUpTime: 0.2
+  PlayerEffect_StartUpTime: 0.2

@@ -14,15 +14,15 @@ MonoBehaviour:
   Ability_Particles: []
   Ability_Icon: {fileID: 2800000, guid: 3aac3087967ea4fae858ec0494fd24d9, type: 3}
   Ability_Name: Riposte
-  Ability_Cooldown: 4
+  Ability_Cooldown: 7
   Ability_Combo_Next: {fileID: 0}
   Hitbox:
     Particles: []
     Shape: 0
-    Hitbox_Linger: 0.3
+    Hitbox_Linger: 0.2
     Hitbox_Damage: 0
     Crowd_Control: []
     ShouldHitSelf: 0
-    isTrigger: 0
+    isTrigger: 1
   Hitbox_StartUpTime: 0
   PlayerEffect_StartUpTime: 0

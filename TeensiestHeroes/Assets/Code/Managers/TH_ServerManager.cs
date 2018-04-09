@@ -133,6 +133,15 @@ internal class TH_ServerManager : IManager
         //Make it simple to read
         bool isBuffered = !buffered;
 
+        //Attach user's id as well.
+        //object[] rpcParams = new object[rpcArgs.Length + 1];
+        //for(int i = 0; i < rpcArgs.Length; i++)
+        //{
+        //    rpcParams[i] = rpcArgs[i];
+        //}
+        //rpcParams[rpcArgs.Length] = netObject.NetworkId;
+        
+
         foreach(var userConnection in CONNECTION_BASE.ConnectionList)
         {
             if (userConnection.UserID != senderUID)

@@ -198,17 +198,24 @@ public class Player : PlayerBehavior
     /// <param name="args">(RPCArgs) <Byte> ID</param>
     public override void SendAbility(RpcArgs args)
     {
-        //TODO: Handle Server Code
 #if !SERVER
-        if(clientSetup && m_AccountStats.IsClient())
+        if (clientSetup && m_AccountStats.IsClient())
         {
-            p_AttackHandler.RPCAbility(args.GetNext<byte>());
+            byte atkID = args.GetNext<byte>();
+            uint netObjID = args.GetNext<uint>();
+
+            if (m_AccountStats.NetObjID == netObjID)
+            {
+                p_AttackHandler.RPCAbility(atkID);
+            }
         }
 #else
         byte id = args.GetNext<byte>();
+        uint netID = args.GetNext<uint>();
+        
         p_AttackHandler.RPCAbility(id);
         
-        GameManager.instance.ServerManager.ReflectRPC(networkObject, m_AccountStats.uID, RPC_SEND_ABILITY, false, id);
+        GameManager.instance.ServerManager.ReflectRPC(networkObject, m_AccountStats.uID, RPC_SEND_ABILITY, false, id, netID);
     #endif
     }
 
@@ -226,8 +233,9 @@ public class Player : PlayerBehavior
             this.transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>().material.color = Color.red;
         }
 #else
-        networkObject.SendRpc(RPC_SEND_ANIM, Receivers.OthersProximity, args.GetNext<byte>());
-    #endif
+        GameManager.instance.ServerManager.ReflectRPC(networkObject, m_AccountStats.uID, RPC_SEND_ANIM, false, args.GetNext<byte>(), args.GetNext<uint>());
+        //networkObject.SendRpc(RPC_SEND_ANIM, Receivers.OthersProximity, args.GetNext<byte>(), networkObject.NetworkId);
+#endif
     }
 
 

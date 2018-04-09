@@ -27,7 +27,8 @@ public class SimpleWeaponHandler : MonoBehaviour, IHandler
             p_Hitbox = GameManager.instance.HitboxManager.MakeHitbox(
                 Current_Ability.Hitbox, 
                 transform.position + gameObject.transform.forward, 
-                1f);
+                1f,
+                transform.gameObject);
             p_Hitbox.HitboxCallback += HitboxCallback;
             #endif
         }

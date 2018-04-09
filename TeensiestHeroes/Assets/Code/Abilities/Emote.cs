@@ -36,4 +36,17 @@ public class Emote : IAbility
     {
         Log.Error("Do not use overloaded Initialize. Use Default Initialize instead.");
     }
+
+    public override object CreateRTInstance()
+    {
+        var data = ScriptableObject.CreateInstance<Emote>() as Emote;
+        
+        data.Ability_Cooldown = Ability_Cooldown;
+        data.Ability_Icon = Ability_Icon;
+        data.Ability_Name = Ability_Name;
+        data.Ability_Particles = Ability_Particles;
+        data.Emote_Duration = Emote_Duration;
+
+        return data;
+    }
 }

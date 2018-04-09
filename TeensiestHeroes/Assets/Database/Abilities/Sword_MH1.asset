@@ -19,10 +19,10 @@ MonoBehaviour:
   Hitbox:
     Particles: []
     Shape: 0
-    Hitbox_Linger: 0.5
-    Hitbox_Damage: 0
+    Hitbox_Linger: 0.3
+    Hitbox_Damage: 5
     Crowd_Control: []
     ShouldHitSelf: 0
     isTrigger: 1
-  Hitbox_StartUpTime: 0
-  PlayerEffect_StartUpTime: 0
+  Hitbox_StartUpTime: 0.3
+  PlayerEffect_StartUpTime: 0.3

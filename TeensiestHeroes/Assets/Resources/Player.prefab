@@ -2948,7 +2948,7 @@ MonoBehaviour:
     isHead: 1
   Walkable:
     serializedVersion: 2
-    m_Bits: 4294964937
+    m_Bits: 4294948553
   ownCollider: {fileID: 136801480516846664}
   radius: 0.3
 --- !u!114 &114347397631412650

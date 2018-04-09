@@ -16,5 +16,13 @@ MonoBehaviour:
   Ability_Name: Stab
   Ability_Cooldown: 0.1
   Ability_Combo_Next: {fileID: 11400000, guid: a22cf6412a9f0c943aac0d83d336d638, type: 2}
+  Hitbox:
+    Particles: []
+    Shape: 0
+    Hitbox_Linger: 0
+    Hitbox_Damage: 0
+    Crowd_Control: []
+    ShouldHitSelf: 0
+    isTrigger: 1
   Hitbox_StartUpTime: 0
   PlayerEffect_StartUpTime: 0
